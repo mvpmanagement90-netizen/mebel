@@ -1,0 +1,527 @@
+[
+  {
+    "username": "AzbukaDomaUz",
+    "title": "Азбука Дома",
+    "subscribers": 1290,
+    "topic": "канал публикует информацию о мебели и предметах интерьера, включая описания коллекций, цены, акции и контакты салонов",
+    "furniture_related": true
+  },
+  {
+    "username": "CNCUZ",
+    "title": "ЧПУ станок запчасти (CNC Machine Parts)",
+    "subscribers": 775,
+    "topic": "канал публикует промышленные электронные компоненты, запчасти и оборудование для станков с ЧПУ",
+    "furniture_related": false
+  },
+  {
+    "username": "CorpInfo",
+    "title": "КорпИнфо",
+    "subscribers": 8370,
+    "topic": "канал публикует новости рынка капитала Узбекистана, корпоративные события и международные бизнес-новости",
+    "furniture_related": false
+  },
+  {
+    "username": "Dafnamebel",
+    "title": "DAFNA",
+    "subscribers": 2830,
+    "topic": "канал посвящен продаже премиальной мебели — офисных кресел, столов и мягкой мебели для коммерческих и жилых объектов",
+    "furniture_related": true
+  },
+  {
+    "username": "MFaktorUz",
+    "title": "MFaktor.uz",
+    "subscribers": 15300,
+    "topic": "канал публикует контент о бизнесе, интервью с предпринимателями, советы по управлению и развитию стартапов",
+    "furniture_related": false
+  },
+  {
+    "username": "MOBIUZrus",
+    "title": "Архивный канал (Mobiuz)",
+    "subscribers": 1460,
+    "topic": "канал публикует новости о мобильной связи, акции и конкурсы оператора Mobiuz, тарифы и технологии",
+    "furniture_related": false
+  },
+  {
+    "username": "PressaUz",
+    "title": "Пресса.uz – Новости Узбекистана",
+    "subscribers": 299000,
+    "topic": "канал публикует новости Узбекистана: погода, происшествия, законодательство, разное",
+    "furniture_related": false
+  },
+  {
+    "username": "SamsungUzbekistan",
+    "title": "Samsung Uzbekistan",
+    "subscribers": 9000,
+    "topic": "канал публикует посты о новых продуктах Samsung — смартфоны, телевизоры, бытовая техника и акции",
+    "furniture_related": false
+  },
+  {
+    "username": "Tashkent_retrospective",
+    "title": "Tashkent Retrospective",
+    "subscribers": 7160,
+    "topic": "история и культура старого Ташкента через архивные фотографии и исторические материалы",
+    "furniture_related": false
+  },
+  {
+    "username": "TheDomUz",
+    "title": "The Dom",
+    "subscribers": 5730,
+    "topic": "канал публикует объявления о продаже квартир и недвижимости в Ташкенте с ценами и контактами",
+    "furniture_related": false
+  },
+  {
+    "username": "YerzhanY",
+    "title": "Yerzhan Yessimkhanov",
+    "subscribers": 32900,
+    "topic": "автор публикует рецензии на фильмы, сериалы, книги и комментарии по политике и праву Казахстана",
+    "furniture_related": false
+  },
+  {
+    "username": "Zumrut_uz",
+    "title": "ZUMRUT",
+    "subscribers": 354,
+    "topic": "канал публикует информацию о премиум турецкой мебели — коллекции диванов с ценами и контактами для заказа",
+    "furniture_related": true
+  },
+  {
+    "username": "afishauz",
+    "title": "Afisha.uz - Все события Ташкента",
+    "subscribers": 32900,
+    "topic": "публикует премьеры фильмов, концерты, выставки, фестивали и другие культурные события Ташкента",
+    "furniture_related": false
+  },
+  {
+    "username": "aiko_uz",
+    "title": "AIKO Мебель",
+    "subscribers": 3370,
+    "topic": "канал производителя мебели для дома и сада: фото и видео комплектов, скидки и акции",
+    "furniture_related": true
+  },
+  {
+    "username": "alfamebeluz",
+    "title": "Мебель в Ташкенте. Альфа мебель.",
+    "subscribers": 2060,
+    "topic": "канал публикует видео и фото премиум мебельных комплектов с описанием материалов и размеров",
+    "furniture_related": true
+  },
+  {
+    "username": "anorbank",
+    "title": "ANORBANK",
+    "subscribers": 74300,
+    "topic": "канал цифрового банка Узбекистана с информацией об услугах: депозиты, кредиты, валютные курсы, золотые слитки, мобильный банкинг",
+    "furniture_related": false
+  },
+  {
+    "username": "ao_uzbekneftegaz",
+    "title": "Uzbekneftgaz | Расмий канал",
+    "subscribers": 21600,
+    "topic": "новости государственного нефтегазового предприятия Узбекистана о проектах и сотрудничестве",
+    "furniture_related": false
+  },
+  {
+    "username": "atlasmebeluz",
+    "title": "Atlas Mebel",
+    "subscribers": 853,
+    "topic": "мебельный магазин, демонстрация продукции салонов мебели в Ташкенте, акции и открытия новых точек",
+    "furniture_related": true
+  },
+  {
+    "username": "atrium_trade_centre",
+    "title": "Торговый центр Atrium",
+    "subscribers": 30,
+    "topic": "продвижение торгового центра в Ташкенте с разными арендаторами: одежда, парфюмерия, текстиль, пекарни, товары для дома, супермаркеты",
+    "furniture_related": false
+  },
+  {
+    "username": "avan_official",
+    "title": "Avan.interior",
+    "subscribers": 197,
+    "topic": "мебель для интерьера: офисная мебель, спальные гарнитуры, гардеробные системы",
+    "furniture_related": true
+  },
+  {
+    "username": "babyhouseuz",
+    "title": "BABY HOUSE",
+    "subscribers": 14500,
+    "topic": "детские товары (уход, постельное белье для новорожденных) с доставкой по Узбекистану",
+    "furniture_related": false
+  },
+  {
+    "username": "birzhauz",
+    "title": "Биржа.Уз | Вакансия | Работа в Ташкенте",
+    "subscribers": 10400,
+    "topic": "вакансии и поиск работы в Ташкенте и других городах Узбекистана",
+    "furniture_related": false
+  },
+  {
+    "username": "bonitoshopuz",
+    "title": "BonitoShop.uz",
+    "subscribers": 1510,
+    "topic": "детская одежда фабрики Bonito Kids, видео с производства и юмористический контент",
+    "furniture_related": false
+  },
+  {
+    "username": "bulavka",
+    "title": "Bulavka.uz",
+    "subscribers": 1310,
+    "topic": "интернет-магазин игрушек, аксессуаров, пижам и других товаров с доставкой",
+    "furniture_related": false
+  },
+  {
+    "username": "caexuzbekistan",
+    "title": "CAEx Uzbekistan",
+    "subscribers": 1570,
+    "topic": "выставки, конференции и деловые мероприятия в выставочном центре CAEx в Ташкенте, включая мебельные выставки",
+    "furniture_related": true
+  },
+  {
+    "username": "chiccotashkent",
+    "title": "Chicco tashkent",
+    "subscribers": 5270,
+    "topic": "продажа детских товаров и аксессуаров (коляски, игрушки, средства ухода) магазина ChiccoBaby.uz",
+    "furniture_related": false
+  },
+  {
+    "username": "consultashkent",
+    "title": "Посольство России в Узбекистане",
+    "subscribers": 11200,
+    "topic": "консульские услуги, новости и культурные события российско-узбекских отношений",
+    "furniture_related": false
+  },
+  {
+    "username": "courierofculture",
+    "title": "ку-ку",
+    "subscribers": 44600,
+    "topic": "аналитика и истории о мире искусства, музеях, архитектуре и культурных событиях",
+    "furniture_related": false
+  },
+  {
+    "username": "divanchi_uz",
+    "title": "Divanchi.uz",
+    "subscribers": 839,
+    "topic": "мебельный магазин, посты о премиальных диванах и креслах с описанием характеристик, размеров и цен",
+    "furniture_related": true
+  },
+  {
+    "username": "dogtastashkent",
+    "title": "DOĞTAŞ TASHKENT",
+    "subscribers": 409,
+    "topic": "премиальная мебель и предметы интерьера шоурума Doğtaş Exclusive в Ташкенте: диваны, кресла, спальные гарнитуры",
+    "furniture_related": true
+  },
+  {
+    "username": "dostavki_tashkent",
+    "title": "Полезные доставки, Ташкент",
+    "subscribers": 1170,
+    "topic": "агрегатор ссылок на доставку товаров (еда, мёд, цветы, лекарства, хозтовары) по Ташкенту",
+    "furniture_related": false
+  },
+  {
+    "username": "emanmaterials",
+    "title": "EMAN Materials",
+    "subscribers": 3530,
+    "topic": "плитные материалы и комплектующие для производства мебели, обзоры оборудования и декоров",
+    "furniture_related": true
+  },
+  {
+    "username": "fastglobalfreight",
+    "title": "Fast Global Freight | Rasmiy",
+    "subscribers": 1210,
+    "topic": "логистика и доставка посылок между США и Узбекистаном",
+    "furniture_related": false
+  },
+  {
+    "username": "fixprice_uzb",
+    "title": "Fix Price Узбекистан",
+    "subscribers": 25000,
+    "topic": "рекламные посты сети магазинов товаров для дома Fix Price",
+    "furniture_related": false
+  },
+  {
+    "username": "fullhouseuz",
+    "title": "FullHouse.uz | Мебель в Ташкенте",
+    "subscribers": 760,
+    "topic": "мебельные гарнитуры и коллекции (спальня, гостиная, прихожая), фабричное производство в Ташкенте",
+    "furniture_related": true
+  },
+  {
+    "username": "gazetauz",
+    "title": "Gazeta.uz - Новости Узбекистана",
+    "subscribers": 86600,
+    "topic": "новости Узбекистана (политика, экономика, право, инфраструктура)",
+    "furniture_related": false
+  },
+  {
+    "username": "glamourboutiquetashkent",
+    "title": "Glamour Boutique",
+    "subscribers": 480,
+    "topic": "люксовая одежда и аксессуары брендовых бутиков Ташкента",
+    "furniture_related": false
+  },
+  {
+    "username": "goldenhouseuz",
+    "title": "Golden House",
+    "subscribers": 10600,
+    "topic": "продажа недвижимости и жилых комплексов от девелопера Golden House",
+    "furniture_related": false
+  },
+  {
+    "username": "headhunter_uz",
+    "title": "hh.uz – работа в Узбекистане",
+    "subscribers": 22300,
+    "topic": "вакансии и поиск работы в разных отраслях Узбекистана",
+    "furniture_related": false
+  },
+  {
+    "username": "homespotuz",
+    "title": "HomeSpot - Все для ремонта и строительства",
+    "subscribers": 2840,
+    "topic": "строительные и отделочные материалы (бамбуковые панели, плитка)",
+    "furniture_related": false
+  },
+  {
+    "username": "infinitybyeman",
+    "title": "INFINITY by Eman Materials (Hettich)",
+    "subscribers": 1510,
+    "topic": "комплектующие для мебели от производителей (Hettich), обучающие видео и выставки для мебельщиков",
+    "furniture_related": true
+  },
+  {
+    "username": "inter_city",
+    "title": "ИНТЕРСИТИ",
+    "subscribers": 16600,
+    "topic": "туроператор, продажа туров и путёвок (Беларусь)",
+    "furniture_related": false
+  },
+  {
+    "username": "ish_bor_tashkent",
+    "title": "ISH BOR TASHKENT | Работа в Ташкенте",
+    "subscribers": 8900,
+    "topic": "вакансии и поиск работы в Ташкенте",
+    "furniture_related": false
+  },
+  {
+    "username": "istiqbol_ideal_mebel",
+    "title": "Istiqbol Ideal Mebel",
+    "subscribers": 4970,
+    "topic": "производитель мебели, фото/видео продукции и оптовые цены с контактами для заказа",
+    "furniture_related": true
+  },
+  {
+    "username": "kapital24",
+    "title": "Kapitalbank Uzbekistan",
+    "subscribers": 25800,
+    "topic": "новости и услуги банка (кредиты, акции, партнёрства)",
+    "furniture_related": false
+  },
+  {
+    "username": "kengmakonuz",
+    "title": "Keng Makon mebellar fabrikasi",
+    "subscribers": 1610,
+    "topic": "мебельная фабрика, демонстрация коллекций мебели премиум-класса с описанием характеристик и контактами для заказа",
+    "furniture_related": true
+  },
+  {
+    "username": "kukahome",
+    "title": "KUKA HOME | Uzbekistan",
+    "subscribers": 1260,
+    "topic": "премиальная мебель китайского бренда KUKA HOME: фото/видео товаров, характеристики, отзывы клиентов",
+    "furniture_related": true
+  },
+  {
+    "username": "lifestyleshopuz",
+    "title": "LifeStyleuz.uz",
+    "subscribers": 42,
+    "topic": "элитная европейская сантехника и мебель для ванных комнат (GROHE, Villeroy & Boch, Jacob Delafon, Porta) с шоурумом в Ташкенте",
+    "furniture_related": true
+  },
+  {
+    "username": "loftart_uz",
+    "title": "МЕБЕЛЬ ЛОФТ | LOFT Art в Ташкенте | Каталог LOFT 2021",
+    "subscribers": 642,
+    "topic": "каталог мебели в стиле лофт, видео готовых изделий, акции и конкурсы, контакты для заказа",
+    "furniture_related": true
+  },
+  {
+    "username": "loftbekk",
+    "title": "LoftBek",
+    "subscribers": 1630,
+    "topic": "продажа мебели в стиле лофт (столы, стулья, стеллажи) с доставкой по Ташкенту и гарантией качества",
+    "furniture_related": true
+  },
+  {
+    "username": "marketingbolimi",
+    "title": "Marketing bo'limi",
+    "subscribers": 9910,
+    "topic": "анализ маркетинговых кейсов, рекламных кампаний и трендов в маркетинге на узбекском языке",
+    "furniture_related": false
+  },
+  {
+    "username": "max_kanalchik",
+    "title": "MAX agency / Илья Лайтнер",
+    "subscribers": 14800,
+    "topic": "продуктовый дизайн, стратегия развития агентства и анализ рынка цифровых услуг в России",
+    "furniture_related": false
+  },
+  {
+    "username": "mebel_house_c5",
+    "title": "Mebel House",
+    "subscribers": 7200,
+    "topic": "продажа мебели премиум-класса бренда Higold с доставкой по Узбекистану",
+    "furniture_related": true
+  },
+  {
+    "username": "meyosassociation",
+    "title": "MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi",
+    "subscribers": 585,
+    "topic": "ассоциация мебельной и деревообрабатывающей промышленности Узбекистана: бизнес-миссии, международные торговые встречи, экспортные возможности",
+    "furniture_related": true
+  },
+  {
+    "username": "mirabad_avenue",
+    "title": "Mirabad Avenue",
+    "subscribers": 1780,
+    "topic": "продвижение жилого комплекса премиум-класса «Mirabad Avenue» в Ташкенте: квартиры, удобства резиденции, услуги",
+    "furniture_related": false
+  },
+  {
+    "username": "mondelux",
+    "title": "MONDELUX | МЕБЕЛЬ №1",
+    "subscribers": 322,
+    "topic": "продажа мебели и гарнитуров с информацией о доставке, рассрочке и еженедельных акциях",
+    "furniture_related": true
+  },
+  {
+    "username": "muborakmebel1998",
+    "title": "Muborak Mebel Fabrikasi",
+    "subscribers": 3400,
+    "topic": "продукция мебельной фабрики: фото и видео наборов мебели с названиями моделей и контактами для покупки",
+    "furniture_related": true
+  },
+  {
+    "username": "myrabota_uz",
+    "title": "Работа в Ташкенте",
+    "subscribers": 354,
+    "topic": "объявления о вакансиях в компаниях Ташкента (производство, образование, логистика, услуги)",
+    "furniture_related": false
+  },
+  {
+    "username": "myunusabad",
+    "title": "Юнусабадцы_24",
+    "subscribers": 9930,
+    "topic": "объявления о местных проблемах, коммерческие предложения и события в районе Юнусабад Ташкента",
+    "furniture_related": false
+  },
+  {
+    "username": "newmillenniumuz",
+    "title": "New Millennium Concept Store",
+    "subscribers": 930,
+    "topic": "скидки и акции на одежду, обувь и аксессуары премиум-брендов в бутике",
+    "furniture_related": false
+  },
+  {
+    "username": "potrebitel_uz",
+    "title": "Потребитель.Уз",
+    "subscribers": 38600,
+    "topic": "потребительский контент: путешествия, коммунальные проблемы, цены, советы по покупкам",
+    "furniture_related": false
+  },
+  {
+    "username": "poytaxt_uz",
+    "title": "Toshkent shahar hokimligi Matbuot xizmati",
+    "subscribers": 26000,
+    "topic": "официальные новости администрации Ташкента о благоустройстве и инфраструктуре города",
+    "furniture_related": false
+  },
+  {
+    "username": "realestatemurod1",
+    "title": "Real Estate Murod",
+    "subscribers": 12200,
+    "topic": "объявления о продаже недвижимости (квартиры, дома)",
+    "furniture_related": false
+  },
+  {
+    "username": "silver_tree_uz",
+    "title": "SILVER TREE UZ",
+    "subscribers": 4010,
+    "topic": "продажа ювелирных украшений (браслеты, цепочки, серьги)",
+    "furniture_related": false
+  },
+  {
+    "username": "spotuz",
+    "title": "Spot.uz – бизнес и технологии",
+    "subscribers": 26500,
+    "topic": "новости и аналитика о бизнесе, экономике и технологиях Узбекистана",
+    "furniture_related": false
+  },
+  {
+    "username": "top_jobuz",
+    "title": "TOP JOB | Работа в Ташкенте",
+    "subscribers": 686,
+    "topic": "вакансии и поиск работы в Ташкенте по разным сферам",
+    "furniture_related": false
+  },
+  {
+    "username": "trudmarket",
+    "title": "Трудмаркет. Работа, Учеба, стажировки",
+    "subscribers": 1020,
+    "topic": "вакансии, стажировки и образовательные программы",
+    "furniture_related": false
+  },
+  {
+    "username": "uzbairportsuz",
+    "title": "UZBEKISTAN AIRPORTS",
+    "subscribers": 12300,
+    "topic": "новости об аэропортах и авиационной инфраструктуре Узбекистана",
+    "furniture_related": false
+  },
+  {
+    "username": "uzbekmid",
+    "title": "МИД Узбекистана",
+    "subscribers": 4210,
+    "topic": "новости дипломатии и внешней политики Узбекистана",
+    "furniture_related": false
+  },
+  {
+    "username": "uzbekretail",
+    "title": "Узбекский Ритейл",
+    "subscribers": 8990,
+    "topic": "новости ритейла, торговых сетей и коммерческой инфраструктуры",
+    "furniture_related": false
+  },
+  {
+    "username": "uznews",
+    "title": "UzNews.uz",
+    "subscribers": 70900,
+    "topic": "общие новости Узбекистана: криминал, культура, экология, бизнес",
+    "furniture_related": false
+  },
+  {
+    "username": "weltewhomeuz",
+    "title": "Weltew Home",
+    "subscribers": 1010,
+    "topic": "мебельный магазин, рекламные посты о турецкой мебели (спальни, гостиные) со скидками",
+    "furniture_related": true
+  },
+  {
+    "username": "workitkz",
+    "title": "IT Вакансии Казахстан",
+    "subscribers": 34500,
+    "topic": "вакансии в сфере IT в Казахстане",
+    "furniture_related": false
+  },
+  {
+    "username": "yunusabadgallery",
+    "title": "Yunusabad Gallery",
+    "subscribers": 133,
+    "topic": "продвижение торгово-развлекательного центра, аренда помещений",
+    "furniture_related": false
+  },
+  {
+    "username": "ziynatdesign",
+    "title": "Ziynat Design",
+    "subscribers": 357,
+    "topic": "рекламно-производственная компания: вывески, световые короба, оформление магазинов",
+    "furniture_related": false
+  }
+]

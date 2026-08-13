@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мебельная индустрия Узбекистана — Аналитика TG/IG активности</title>
+<style>
+  :root.viz-root, .viz-root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;
+    --page: #f4f3f0;
+    --card: #ffffff;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted: #898781;
+    --gridline: #e9e8e2;
+    --border: rgba(11,11,11,0.08);
+    --border-strong: rgba(11,11,11,0.14);
+    --accent: #2a78d6;
+    --accent-soft: #eaf1fb;
+    --good: #0ca30c;
+    --good-soft: #e8f7e8;
+    --critical: #d03b3b;
+    --critical-soft: #fbebeb;
+    --warning: #c98500;
+    --warning-soft: #fbf1de;
+    --muted-chip: #c3c2b7;
+    --muted-chip-soft: #f0efec;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow-soft: 0 1px 2px rgba(11,11,11,0.04), 0 8px 24px -12px rgba(11,11,11,0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 28px 32px 64px; }
+  .wrap { max-width: 1320px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  header.top {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 24px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  header.top h1 { font-size: 22px; font-weight: 650; margin: 0 0 6px; letter-spacing: -0.01em; }
+  header.top p.sub { margin: 0; color: var(--text-secondary); font-size: 13.5px; max-width: 640px; line-height: 1.5; }
+  .meta-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 999px; padding: 7px 14px; font-size: 12.5px; color: var(--text-secondary);
+    box-shadow: var(--shadow-soft);
+  }
+  .meta-pill b { color: var(--text-primary); font-weight: 600; }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    padding: 20px 22px;
+  }
+  .card h2 {
+    font-size: 14px; font-weight: 650; margin: 0 0 3px; letter-spacing: -0.005em;
+  }
+  .card p.hint { margin: 0 0 16px; font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .grid { display: grid; gap: 18px; }
+
+  /* ---------- filter bar ---------- */
+  .filterbar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 20px; padding: 14px 18px;
+  }
+  .filterbar .fgroup { display: flex; flex-direction: column; gap: 5px; }
+  .filterbar label.flabel { font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-muted); font-weight: 600; }
+  .filterbar select, .filterbar input[type=text] {
+    font: inherit; font-size: 13px; color: var(--text-primary);
+    background: var(--surface-1); border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm); padding: 8px 12px; min-width: 160px;
+    outline: none;
+  }
+  .filterbar select:focus, .filterbar input:focus { border-color: var(--accent); }
+  .chipset { display: flex; gap: 6px; flex-wrap: wrap; max-width: 480px; }
+  .chip {
+    font-size: 12px; padding: 6px 12px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--border-strong); background: var(--surface-1); color: var(--text-secondary);
+    user-select: none; transition: all .12s ease;
+  }
+  .chip.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+  .filterbar .spacer { flex: 1; }
+  .reset-btn {
+    font-size: 12.5px; color: var(--text-secondary); background: none; border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm); padding: 8px 14px; cursor: pointer;
+  }
+  .reset-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+
+  /* ---------- stat tiles ---------- */
+  .stats-row { grid-template-columns: repeat(6, 1fr); margin-bottom: 18px; }
+  @media (max-width: 1100px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+  .tile { padding: 16px 18px; }
+  .tile .label { font-size: 11.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; letter-spacing: .01em; }
+  .tile .value { font-size: 25px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.1; }
+  .tile .delta { font-size: 11.5px; margin-top: 6px; color: var(--text-secondary); }
+  .tile .delta.flag-critical { color: var(--critical); font-weight: 600; }
+  .tile .delta.flag-good { color: var(--good); font-weight: 600; }
+
+  /* ---------- regulation panel ---------- */
+  .reg-panel { margin-bottom: 18px; }
+  .reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px 28px; }
+  .reg-item label.rlabel {
+    display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);
+  }
+  .reg-item label.rlabel span.val { color: var(--accent); font-weight: 700; }
+  input[type=range] {
+    -webkit-appearance: none; width: 100%; height: 4px; border-radius: 2px;
+    background: var(--gridline); outline: none; margin: 10px 0 2px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border-strong);
+    cursor: pointer; margin-top: -6px;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--border-strong); cursor: pointer;
+  }
+  .rlabel-min-max { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .toggle-row .rlabel { margin-bottom: 0; flex: 1; }
+  .switch { position: relative; width: 38px; height: 22px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider-tog {
+    position: absolute; inset: 0; background: var(--muted-chip); border-radius: 999px; cursor: pointer; transition: .15s;
+  }
+  .slider-tog:before {
+    content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff;
+    border-radius: 50%; transition: .15s;
+  }
+  .switch input:checked + .slider-tog { background: var(--accent); }
+  .switch input:checked + .slider-tog:before { transform: translateX(16px); }
+  .weight-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; }
+
+  /* ---------- charts layout ---------- */
+  .charts-row-2 { grid-template-columns: 1.3fr 1fr; }
+  .charts-row-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 980px) { .charts-row-2, .charts-row-3 { grid-template-columns: 1fr; } }
+
+  /* bar chart (hand-rolled) */
+  .barchart { display: flex; flex-direction: column; gap: 10px; }
+  .barrow { display: grid; grid-template-columns: 150px 1fr 54px; align-items: center; gap: 10px; }
+  .barrow .barlabel { font-size: 12px; color: var(--text-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .barrow .bartrack { position: relative; height: 20px; background: var(--gridline); border-radius: 4px; overflow: hidden; }
+  .barrow .barfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--accent); transition: width .25s ease; }
+  .barrow .barval { font-size: 12px; font-weight: 600; color: var(--text-primary); text-align: left; font-variant-numeric: tabular-nums; }
+
+  /* stacked bar */
+  .stackchart { display: flex; flex-direction: column; gap: 12px; }
+  .stackrow { display: grid; grid-template-columns: 128px 1fr; align-items: center; gap: 10px; }
+  .stackrow .slabel { font-size: 12px; color: var(--text-secondary); text-align: right; }
+  .stacktrack { display: flex; height: 22px; border-radius: 5px; overflow: hidden; background: var(--gridline); }
+  .stackseg { height: 100%; }
+  .stackseg + .stackseg { border-left: 2px solid #fff; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--text-secondary); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* donut */
+  .donut-wrap { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; justify-content: center; }
+  svg.donut { flex-shrink: 0; }
+  .donut-center-label { font-size: 20px; font-weight: 700; }
+  .donut-center-sub { font-size: 10.5px; fill: var(--text-muted); }
+
+  /* leaderboard */
+  .leaderboard { display: flex; flex-direction: column; gap: 8px; }
+  .lb-row { display: grid; grid-template-columns: 24px 1fr 70px 90px; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); }
+  .lb-row:nth-child(odd) { background: var(--surface-1); }
+  .lb-rank { font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .lb-name { font-size: 12.5px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb-sphere { font-size: 10.5px; color: var(--text-muted); font-weight: 400; display: block; }
+  .lb-score { font-size: 13px; font-weight: 700; color: var(--accent); text-align: right; font-variant-numeric: tabular-nums; }
+  .lb-bar-track { height: 6px; background: var(--gridline); border-radius: 3px; overflow: hidden; }
+  .lb-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+  /* badges */
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .badge.own { background: var(--good-soft); color: var(--good); }
+  .badge.shared { background: var(--accent-soft); color: var(--accent); }
+  .badge.unrelated { background: var(--critical-soft); color: var(--critical); }
+  .badge.none { background: var(--muted-chip-soft); color: var(--text-muted); }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* callout */
+  .callout {
+    display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px;
+    background: var(--critical-soft); border: 1px solid rgba(208,59,59,0.18); border-radius: var(--radius-md);
+    margin-bottom: 18px;
+  }
+  .callout .icon { font-size: 18px; line-height: 1; margin-top: 1px; }
+  .callout h3 { margin: 0 0 4px; font-size: 13.5px; color: #7a1616; font-weight: 700; }
+  .callout p { margin: 0; font-size: 12.5px; color: #6b1e1e; line-height: 1.55; }
+
+  /* table */
+  table.datatable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.datatable th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em;
+    color: var(--text-muted); font-weight: 650; padding: 0 10px 10px; border-bottom: 1px solid var(--gridline);
+    cursor: pointer; white-space: nowrap; position: sticky; top: 0; background: var(--card);
+  }
+  table.datatable th:hover { color: var(--text-primary); }
+  table.datatable td { padding: 9px 10px; border-bottom: 1px solid var(--gridline); vertical-align: middle; }
+  table.datatable tr:hover td { background: var(--surface-1); }
+  .table-scroll { max-height: 520px; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--gridline); }
+  .tname { font-weight: 600; color: var(--text-primary); }
+  .tsub { display: block; font-size: 10.5px; color: var(--text-muted); font-weight: 400; }
+  .tg-link { color: var(--accent); text-decoration: none; font-size: 11.5px; }
+  .tg-link:hover { text-decoration: underline; }
+  .num { font-variant-numeric: tabular-nums; text-align: right; }
+  .dot-ig { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+  .dot-ig.on { background: var(--good); }
+  .dot-ig.off { background: var(--muted-chip); }
+
+  .section-title { font-size: 16px; font-weight: 650; margin: 34px 0 4px; letter-spacing: -0.01em; }
+  .section-desc { font-size: 12.5px; color: var(--text-secondary); margin: 0 0 16px; max-width: 720px; line-height: 1.55; }
+
+  footer.foot { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--gridline); font-size: 11.5px; color: var(--text-muted); }
+</style>
+</head>
+<body class="viz-root">
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <h1>Мебельная индустрия Узбекистана — активность в Telegram и Instagram</h1>
+      <p class="sub">Аналитический дашборд на основе выгрузки по 160 мебельным компаниям Ташкента (данные собраны 13.08.2026). Показатели ниже можно фильтровать по сфере деятельности, статусу Telegram и названию — изменения применяются мгновенно ко всем графикам.</p>
+    </div>
+    <div class="meta-pill">Компаний в выборке: <b id="pill-total">160</b></div>
+  </header>
+
+  <!-- ===== FILTER BAR ===== -->
+  <div class="card filterbar" id="filterbar">
+    <div class="fgroup" style="min-width:220px;">
+      <label class="flabel">Поиск по названию</label>
+      <input type="text" id="f-search" placeholder="например: Loft, Мебель...">
+    </div>
+    <div class="fgroup">
+      <label class="flabel">Статус Telegram-присутствия</label>
+      <select id="f-tgstatus">
+        <option value="all">Все статусы</option>
+        <option value="own_brand_channel">Собственный канал бренда</option>
+        <option value="shared_furniture_channel">Общий/торговый канал</option>
+        <option value="unrelated_channel">Ссылка на чужой канал</option>
+        <option value="no_telegram">Нет Telegram</option>
+      </select>
+    </div>
+    <div class="fgroup" style="min-width:280px;">
+      <label class="flabel">Сфера деятельности</label>
+      <div class="chipset" id="f-sphere-chips"></div>
+    </div>
+    <div class="spacer"></div>
+    <button class="reset-btn" id="f-reset">Сбросить фильтры</button>
+  </div>
+
+  <!-- ===== STAT TILES ===== -->
+  <div class="grid stats-row" id="stat-tiles"></div>
+
+  <!-- data quality callout (static finding, always visible) -->
+  <div class="callout">
+    <div class="icon">⚠️</div>
+    <div>
+      <h3>Качество исходных данных по Telegram</h3>
+      <p>Из 126 записей со ссылкой на Telegram только <b>24 (19%)</b> действительно ведут на собственный канал бренда. Остальные ссылки указывают на каналы вакансий (hh.uz, Биржа.Уз), банков, СМИ и маркетплейсов, не связанные с конкретной компанией — вероятно, из-за автоматического сбора данных по ключевым словам. Показатели ниже разделяют «собственные», «общие отраслевые» и «нерелевантные» ссылки, чтобы не завышать реальную TG-активность рынка.</p>
+    </div>
+  </div>
+
+  <!-- ===== CHARTS ROW 1 ===== -->
+  <div class="grid charts-row-2">
+    <div class="card">
+      <h2>Достоверность Telegram-ссылок по всей выборке</h2>
+      <p class="hint">160 компаний, разбивка по типу привязки к Telegram</p>
+      <div class="donut-wrap" id="chart-tgquality"></div>
+    </div>
+    <div class="card">
+      <h2>Компании по сфере деятельности</h2>
+      <p class="hint">Число компаний в выборке (после фильтров)</p>
+      <div class="barchart" id="chart-sphere"></div>
+    </div>
+  </div>
+
+  <!-- ===== CHARTS ROW 2 ===== -->
+  <div class="grid charts-row-2" style="margin-top:18px;">
+    <div class="card">
+      <h2>Давность последнего поста (собственные каналы)</h2>
+      <p class="hint">Среди <span id="own-count-hint">24</span> компаний с подлинным брендовым каналом</p>
+      <div class="barchart" id="chart-recency"></div>
+    </div>
+    <div class="card">
+      <h2>Топ каналов по числу подписчиков</h2>
+      <p class="hint">Только собственные брендовые каналы</p>
+      <div class="barchart" id="chart-top-subs"></div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    Данные: выгрузка «Аналитика Мебель.xlsx» (160 компаний, собрано 13.08.2026) + сбор метаданных 75 уникальных Telegram-каналов через публичные превью t.me/s/. Дашборд сгенерирован автоматически, будьте внимательны к ограничениям исходных данных (см. блок «Качество исходных данных»).
+  </footer>
+
+</div>
+
+<script id="raw-data" type="application/json">[{"id":1,"name":"Ташкент Мебель, производственный цех","sphere":"Корпусная мебель","address":"улица Уста Ширин, 117а","instagram_link":"https://www.instagram.com/reel/DPJfGjTCG3O/","instagram_active":true,"tg_link":"https://t.me/s/alfamebeluz?before=1302","tg_username":"alfamebeluz","tg_status":"own_brand_channel","tg_title":"Мебель в Ташкенте. Альфа мебель.","tg_subscribers":2060,"tg_last_post":"2026-08-05","tg_days_since_last_post":8,"tg_prior_post_date":"2025-08-29"},{"id":2,"name":"Km Plimante, мебельный салон","sphere":"Офисная мебель","address":"Паркент, 182","instagram_link":"https://www.instagram.com/p/DXACRvDjDmE/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":3,"name":"WOODLINE, салон мебели","sphere":"Мягкая мебель","address":"Чиланзарская улица, 88","instagram_link":"https://www.instagram.com/woodline_pro/","instagram_active":true,"tg_link":"https://t.me/s/divanchi_uz?before=772","tg_username":"divanchi_uz","tg_status":"own_brand_channel","tg_title":"Divanchi.uz","tg_subscribers":839,"tg_last_post":"2025-02-27","tg_days_since_last_post":532,"tg_prior_post_date":"2025-02-27"},{"id":4,"name":"Home market, магазин","sphere":"Офисная мебель","address":"улица Кораташ, 5а","instagram_link":null,"instagram_active":false,"tg_link":"https://t.me/s/potrebitel_uz?before=3605","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":5,"name":"Ergo, компания-производитель и импортер офисной мебели","sphere":"Мягкая мебель","address":"улица Ислама Каримова, 17","instagram_link":"https://www.instagram.com/p/DYB0DDCCE_p/","instagram_active":true,"tg_link":"https://t.me/s/top_jobuz?before=4642","tg_username":"top_jobuz","tg_status":"unrelated_channel","tg_title":"TOP JOB | Работа в Ташкенте","tg_subscribers":686,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":6,"name":"Home Spot, строительный гипермаркет","sphere":"Офисная мебель","address":"улица Янги Сергели, 53/1","instagram_link":"https://www.instagram.com/homespot.uz/","instagram_active":true,"tg_link":"https://t.me/s/homespotuz?before=38","tg_username":"homespotuz","tg_status":"unrelated_channel","tg_title":"HomeSpot - Все для ремонта и строительства","tg_subscribers":2840,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":7,"name":"Dafna, шоурум","sphere":"Мягкая мебель","address":"проспект Шарафа Рашидова, 71","instagram_link":"https://www.instagram.com/dafnamebel/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?before=201","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":8,"name":"Askona, магазин","sphere":"Спальная мебель","address":"улица Батыра Закирова, 7","instagram_link":"https://www.instagram.com/ia.roslava9953/reel/DboTTsqMuBO/","instagram_active":true,"tg_link":"https://t.me/s/afishauz?before=20527","tg_username":"afishauz","tg_status":"unrelated_channel","tg_title":"Afisha.uz - Все события Ташкента","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":9,"name":"Mebel sklad, мебельный салон","sphere":"Спальная мебель","address":"Файзли, 5а","instagram_link":"https://www.instagram.com/mebel_sklad.uz/","instagram_active":true,"tg_link":"https://t.me/s/fullhouseuz?before=1001","tg_username":"fullhouseuz","tg_status":"shared_furniture_channel","tg_title":"FullHouse.uz | Мебель в Ташкенте","tg_subscribers":760,"tg_last_post":"2022-05-27","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":10,"name":"Kano, мебельный салон","sphere":"Корпусная мебель","address":"улица Ислама Каримова, 17","instagram_link":"https://www.instagram.com/p/CxfTF_zqhQX/","instagram_active":true,"tg_link":"https://t.me/s/uzbekretail/13783","tg_username":"uzbekretail","tg_status":"unrelated_channel","tg_title":"Узбекский Ритейл","tg_subscribers":8990,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":11,"name":"Dafna, шоурум","sphere":"Мягкая мебель","address":"улица Мирабад, 35","instagram_link":"https://www.instagram.com/dafnamebel/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?before=201","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":12,"name":"AIKO, шоурум","sphere":"Мягкая мебель","address":"Райхон 1-й проезд, 4","instagram_link":"https://www.instagram.com/aiko.uz/","instagram_active":true,"tg_link":"https://t.me/s/aiko_uz/2632","tg_username":"aiko_uz","tg_status":"own_brand_channel","tg_title":"AIKO Мебель","tg_subscribers":3370,"tg_last_post":"2026-08-12","tg_days_since_last_post":1,"tg_prior_post_date":"2025-07-17"},{"id":13,"name":"Rich house, шоурум","sphere":"Мягкая мебель","address":"Мирзо Улугбека проспект, 18","instagram_link":"https://www.instagram.com/richhouseuz/","instagram_active":true,"tg_link":"https://t.me/s/PressaUz?before=20923","tg_username":"PressaUz","tg_status":"unrelated_channel","tg_title":"Пресса.uz – Новости Узбекистана","tg_subscribers":299000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":14,"name":"Scandi home, магазин смешанных товаров","sphere":"Корпусная мебель","address":"улица Батыра Закирова, 7","instagram_link":"https://www.instagram.com/scandihome.uz/","instagram_active":true,"tg_link":"https://t.me/s/fixprice_uzb?before=5601","tg_username":"fixprice_uzb","tg_status":"unrelated_channel","tg_title":"Fix Price Узбекистан","tg_subscribers":25000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":15,"name":"Atlas, мебельный комплекс","sphere":"Мягкая мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/atlasmebeluz/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=589","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":16,"name":"Premium Concept, магазин","sphere":"Мебельный магазин","address":"Салар буйи, 24","instagram_link":"https://www.instagram.com/premium_concept_uz/","instagram_active":true,"tg_link":"https://t.me/s/newmillenniumuz?after=2343","tg_username":"newmillenniumuz","tg_status":"unrelated_channel","tg_title":"New Millennium Concept Store","tg_subscribers":930,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":17,"name":"Home market, магазин","sphere":"Мягкая мебель","address":"Паркент, 201д","instagram_link":null,"instagram_active":false,"tg_link":"https://t.me/s/potrebitel_uz?before=3605","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":18,"name":"Comfort mebel, мебельная компания","sphere":"Мягкая мебель","address":"Учтепа 23-й квартал, 34а","instagram_link":"https://www.instagram.com/comfort_mebel_2018/","instagram_active":true,"tg_link":"https://t.me/s/potrebitel_uz/10280?q=%23%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":19,"name":"vTashkente.uz, производственная компания","sphere":"Мягкая мебель","address":"улица Шота Руставели, 55а","instagram_link":"https://www.instagram.com/vtashkente.uz/","instagram_active":true,"tg_link":"https://t.me/s/ao_uzbekneftegaz?before=426","tg_username":"ao_uzbekneftegaz","tg_status":"unrelated_channel","tg_title":"Uzbekneftgaz | Расмий канал","tg_subscribers":21600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":20,"name":"Premium Line, торговый дом","sphere":"Не определено","address":"улица Чингиза Айтматова, 18","instagram_link":"https://www.instagram.com/premium_line_central_asia/","instagram_active":true,"tg_link":"https://t.me/s/afishauz?after=8123","tg_username":"afishauz","tg_status":"unrelated_channel","tg_title":"Afisha.uz - Все события Ташкента","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":21,"name":"Lamebel, мебельная компания","sphere":"Мягкая мебель","address":"Махтумкули, 96","instagram_link":"https://www.instagram.com/_lamebel_/","instagram_active":true,"tg_link":"https://t.me/s/atrium_trade_centre/207","tg_username":"atrium_trade_centre","tg_status":"unrelated_channel","tg_title":"Торговый центр Atrium","tg_subscribers":30,"tg_last_post":"2021-03-30","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":22,"name":"Komandor, мебельный салон","sphere":"Мягкая мебель","address":"Осиё улица, 17","instagram_link":"https://www.instagram.com/komandor_uz/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?after=12","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":23,"name":"Barocco, магазин мебели","sphere":"Спальная мебель","address":"улица Уста Ширин, 117/3","instagram_link":"https://www.instagram.com/p/BtGfBIMhxg6/","instagram_active":true,"tg_link":"https://t.me/s/mondelux?before=94","tg_username":"mondelux","tg_status":"shared_furniture_channel","tg_title":"MONDELUX | МЕБЕЛЬ №1","tg_subscribers":322,"tg_last_post":"2022-01-21","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":24,"name":"Dolce&Gabbana, магазин","sphere":"Корпусная мебель","address":"улица Мирабад, 66 блок B","instagram_link":"https://www.instagram.com/p/CvXPt-7tPKK/","instagram_active":true,"tg_link":"https://t.me/s/glamourboutiquetashkent?before=214","tg_username":"glamourboutiquetashkent","tg_status":"unrelated_channel","tg_title":"Glamour Boutique","tg_subscribers":480,"tg_last_post":"2021-09-22","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":25,"name":"LoftBek, шоурум","sphere":"Мягкая мебель","address":"Янги Олмазор, 5/3","instagram_link":"https://www.instagram.com/p/Cs-dZ9ZKes8/","instagram_active":true,"tg_link":"https://t.me/s/loftbekk?before=781","tg_username":"loftbekk","tg_status":"own_brand_channel","tg_title":"LoftBek","tg_subscribers":1630,"tg_last_post":"2026-06-20","tg_days_since_last_post":54,"tg_prior_post_date":"2025-08-28"},{"id":26,"name":"KidPoint, магазин","sphere":"Детская мебель","address":"Катартал, 28","instagram_link":"https://www.instagram.com/reel/DPYAcIhDGvq/","instagram_active":true,"tg_link":"https://t.me/s/myrabota_uz?q=%23%D0%AD%D0%BA%D0%BE%D0%B1%D0%B0%D0%B7%D0%B0%D1%80","tg_username":"myrabota_uz","tg_status":"unrelated_channel","tg_title":"Работа в Ташкенте","tg_subscribers":354,"tg_last_post":"2026-08-12","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":27,"name":"Comfort mebel, мебельная компания","sphere":"Мягкая мебель","address":"улица Богишамол, 260а","instagram_link":"https://www.instagram.com/comfort_mebel_2018/","instagram_active":true,"tg_link":"https://t.me/s/potrebitel_uz/10280?q=%23%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":28,"name":"Neo Clasica, шоурум","sphere":"Мебель на заказ","address":null,"instagram_link":"https://www.instagram.com/reel/DVDeSfCAO20/","instagram_active":true,"tg_link":"https://t.me/s/fixprice_uzb?before=15045","tg_username":"fixprice_uzb","tg_status":"unrelated_channel","tg_title":"Fix Price Узбекистан","tg_subscribers":25000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":29,"name":"Keng Makon, салон мебели","sphere":"Мягкая мебель","address":"Нукусская улица, 48","instagram_link":"https://www.instagram.com/kengmakon.uzb/","instagram_active":true,"tg_link":"https://t.me/s/kengmakonuz/2545","tg_username":"kengmakonuz","tg_status":"own_brand_channel","tg_title":"Keng Makon mebellar fabrikasi","tg_subscribers":1610,"tg_last_post":"2026-08-13","tg_days_since_last_post":0,"tg_prior_post_date":"2025-08-30"},{"id":30,"name":"Ergo, компания-производитель и импортер офисной мебели","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/p/DYB0DDCCE_p/","instagram_active":true,"tg_link":"https://t.me/s/top_jobuz?before=4642","tg_username":"top_jobuz","tg_status":"unrelated_channel","tg_title":"TOP JOB | Работа в Ташкенте","tg_subscribers":686,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":31,"name":"Mebel istiqlol, мебельный салон","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/istiqlol.mebel/","instagram_active":true,"tg_link":"https://t.me/s/istiqbol_ideal_mebel?before=844","tg_username":"istiqbol_ideal_mebel","tg_status":"own_brand_channel","tg_title":"Istiqbol Ideal Mebel","tg_subscribers":4970,"tg_last_post":"2026-08-13","tg_days_since_last_post":0,"tg_prior_post_date":null},{"id":32,"name":"Mebel house, салон мебели","sphere":"Мягкая мебель","address":"Киёт жилмассив (Ц-5), 67","instagram_link":"https://www.instagram.com/reel/DaSDrlKIedl/","instagram_active":true,"tg_link":"https://t.me/mebel_house_c5","tg_username":"mebel_house_c5","tg_status":"shared_furniture_channel","tg_title":"Mebel House","tg_subscribers":7200,"tg_last_post":"2026-07-19","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":33,"name":"WoodShark, мебельная мастерская","sphere":"Мебель на заказ","address":null,"instagram_link":"https://www.instagram.com/p/C2WBKTRqYw4/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":34,"name":"Fed, шоурум","sphere":"Мебель на заказ","address":"Заргарлик, 10а","instagram_link":"https://www.instagram.com/fedmebel_official/reels/","instagram_active":true,"tg_link":"https://t.me/s/fastglobalfreight?before=138","tg_username":"fastglobalfreight","tg_status":"unrelated_channel","tg_title":"Fast Global Freight | Rasmiy","tg_subscribers":1210,"tg_last_post":"2024-08-15","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":35,"name":"Wallmann, Производственная компания","sphere":"Мягкая мебель","address":"Боткина 4-й переулок 1-й тупик, 29","instagram_link":"https://www.instagram.com/3d4p_tashkent/","instagram_active":true,"tg_link":"https://t.me/s/spotuz?before=9076","tg_username":"spotuz","tg_status":"unrelated_channel","tg_title":"Spot.uz – бизнес и технологии","tg_subscribers":26500,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":36,"name":"Rich House, шоурум","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/richhouseuz/","instagram_active":true,"tg_link":"https://t.me/s/PressaUz?before=20923","tg_username":"PressaUz","tg_status":"unrelated_channel","tg_title":"Пресса.uz – Новости Узбекистана","tg_subscribers":299000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":37,"name":"Comfort mebel, мебельная компания","sphere":"Мягкая мебель","address":"улица Ислама Каримова, 17","instagram_link":"https://www.instagram.com/comfort_mebel_2018/","instagram_active":true,"tg_link":"https://t.me/s/potrebitel_uz/10280?q=%23%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":38,"name":"Porcelanosa Associate Tashkent, шоурум","sphere":"Не определено","address":"Паркент, 170","instagram_link":"https://www.instagram.com/porcelanosa.tashkent/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":39,"name":"Dafna, шоурум","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/dafnamebel/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?before=201","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":40,"name":"Grohe, магазин","sphere":"Мебельный магазин","address":"Паркент, 209","instagram_link":"https://www.instagram.com/reel/DQbgBrxiJIn/","instagram_active":true,"tg_link":"https://t.me/s/lifestyleshopuz?before=217","tg_username":"lifestyleshopuz","tg_status":"own_brand_channel","tg_title":"LifeStyleuz.uz","tg_subscribers":42,"tg_last_post":"2021-08-28","tg_days_since_last_post":1811,"tg_prior_post_date":"2021-08-28"},{"id":41,"name":"Verona, мебельный салон","sphere":"Спальная мебель","address":"Чиланзар 7-й квартал, 33а","instagram_link":"https://www.instagram.com/veronamebel.uz/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=206","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":42,"name":"Muborak, мебельная фабрика","sphere":"Мягкая мебель","address":"Куксарай, 32/1","instagram_link":null,"instagram_active":false,"tg_link":"https://t.me/muborakmebel1998","tg_username":"muborakmebel1998","tg_status":"own_brand_channel","tg_title":"Muborak Mebel Fabrikasi","tg_subscribers":3400,"tg_last_post":"2026-08-11","tg_days_since_last_post":2,"tg_prior_post_date":"2025-08-31"},{"id":43,"name":"Bosch, магазин","sphere":"Мебельный магазин","address":"проспект Амира Темура, 1а/1","instagram_link":"https://www.instagram.com/b_tower_nedvijimost/p/DEiUkEROOZ_/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B5%D1%82%D1%81%D1%8F-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80%D0%B0%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B5%D1%82%D1%81%D1%8F-%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D1%8F%D1%88%D0%BD%D0%B0%D0%B1%D0%B0%D0%B4%D1%81%D0%BA%D0%B8%D0%B9-%D1%80%D0%B0%D0%B9%D0%BE%D0%BD%D1%83%D0%BB%D0%BF%D0%B0%D1%80%D0%BA%D0%B5%D0%BD%D1%82%D0%B8%D1%81%D0%BA%D0%B8-%D0%BE%D1%80%D1%80-bosch/?hl=en","instagram_active":true,"tg_link":"https://t.me/s/TheDomUz/132117?q=%23IK","tg_username":"TheDomUz","tg_status":"unrelated_channel","tg_title":"The Dom","tg_subscribers":5730,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":44,"name":"Olympia, мебельный салон","sphere":"Мягкая мебель","address":"улица Янги Куйлюк, 1Б","instagram_link":"https://www.instagram.com/reel/DMVcfwZMDrg/","instagram_active":true,"tg_link":"https://t.me/s/Tashkent_retrospective?before=2105","tg_username":"Tashkent_retrospective","tg_status":"unrelated_channel","tg_title":"Tashkent Retrospective","tg_subscribers":7160,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":45,"name":"Istiqbol Ideal Mebel, салон мебели","sphere":"Корпусная мебель","address":"Истиклол МФИ, 28д","instagram_link":"https://www.instagram.com/reel/CaCA-a8Ky7g/","instagram_active":true,"tg_link":"https://t.me/s/istiqbol_ideal_mebel?before=844","tg_username":"istiqbol_ideal_mebel","tg_status":"own_brand_channel","tg_title":"Istiqbol Ideal Mebel","tg_subscribers":4970,"tg_last_post":"2026-08-13","tg_days_since_last_post":0,"tg_prior_post_date":null},{"id":46,"name":"Mebel house, салон мебели","sphere":"Мягкая мебель","address":"Кушкуприк, 30","instagram_link":"https://www.instagram.com/reel/DaSDrlKIedl/","instagram_active":true,"tg_link":"https://t.me/mebel_house_c5","tg_username":"mebel_house_c5","tg_status":"shared_furniture_channel","tg_title":"Mebel House","tg_subscribers":7200,"tg_last_post":"2026-07-19","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":47,"name":"Kansler, компания","sphere":"Офисная мебель","address":"Авлиё Ота, 2/1","instagram_link":"https://www.instagram.com/kansler.uz/","instagram_active":true,"tg_link":"https://t.me/s/uzbekmid?before=10851","tg_username":"uzbekmid","tg_status":"unrelated_channel","tg_title":"МИД Узбекистана","tg_subscribers":4210,"tg_last_post":"2025-02-14","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":48,"name":"Alma, салон мебели","sphere":"Мягкая мебель","address":"Киёт жилмассив (Ц-5), 38","instagram_link":"https://www.instagram.com/almamebel.uz/","instagram_active":true,"tg_link":"https://t.me/s/avan_official?before=647","tg_username":"avan_official","tg_status":"own_brand_channel","tg_title":"Avan.interior","tg_subscribers":197,"tg_last_post":"2026-06-12","tg_days_since_last_post":62,"tg_prior_post_date":"2025-08-22"},{"id":49,"name":"DogTas, магазин мебели","sphere":"Спальная мебель","address":"Махтумкули, 75/4","instagram_link":"https://www.instagram.com/dogtastashkent/","instagram_active":true,"tg_link":"https://t.me/s/dogtastashkent?before=519","tg_username":"dogtastashkent","tg_status":"own_brand_channel","tg_title":"DOĞTAŞ TASHKENT","tg_subscribers":409,"tg_last_post":"2026-08-10","tg_days_since_last_post":3,"tg_prior_post_date":"2025-08-29"},{"id":50,"name":"Bellona, мебельный салон","sphere":"Мягкая мебель","address":"проспект Алишера Навои, 24","instagram_link":"https://www.instagram.com/p/C3X_syVo78J/","instagram_active":true,"tg_link":"https://t.me/s/mondelux?before=76","tg_username":"mondelux","tg_status":"shared_furniture_channel","tg_title":"MONDELUX | МЕБЕЛЬ №1","tg_subscribers":322,"tg_last_post":"2022-01-21","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":51,"name":"Kuka home, салон мебели","sphere":"Мягкая мебель","address":"улица Гавхар, 124/1","instagram_link":"https://www.instagram.com/kukahome_uzbekistan/","instagram_active":true,"tg_link":"https://t.me/s/kukahome","tg_username":"kukahome","tg_status":"own_brand_channel","tg_title":"KUKA HOME | Uzbekistan","tg_subscribers":1260,"tg_last_post":"2026-08-11","tg_days_since_last_post":2,"tg_prior_post_date":"2025-08-29"},{"id":52,"name":"Galeria, магазин","sphere":"Мягкая мебель","address":"улица Фурката, 2","instagram_link":"https://www.instagram.com/reel/DO5DliFjAKA/","instagram_active":true,"tg_link":"https://t.me/s/yunusabadgallery?before=144","tg_username":"yunusabadgallery","tg_status":"unrelated_channel","tg_title":"Yunusabad Gallery","tg_subscribers":133,"tg_last_post":"2025-01-08","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":53,"name":"Avangard, мебельный салон","sphere":"Мягкая мебель","address":"улица Фурката, 29","instagram_link":"https://www.instagram.com/avangard_homemebel/","instagram_active":true,"tg_link":"https://t.me/s/avan_official?before=647","tg_username":"avan_official","tg_status":"own_brand_channel","tg_title":"Avan.interior","tg_subscribers":197,"tg_last_post":"2026-06-12","tg_days_since_last_post":62,"tg_prior_post_date":"2025-08-22"},{"id":54,"name":"Orlida, мебельный магазин","sphere":"Мягкая мебель","address":"улица Фурката, 9","instagram_link":"https://www.instagram.com/reel/CRDxJDiBmzT/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":55,"name":"Design 49, мебельный салон","sphere":"Мягкая мебель","address":"Олтинтепа, 299","instagram_link":"https://www.instagram.com/49portal/","instagram_active":true,"tg_link":"https://t.me/s/alfamebeluz?before=1312","tg_username":"alfamebeluz","tg_status":"own_brand_channel","tg_title":"Мебель в Ташкенте. Альфа мебель.","tg_subscribers":2060,"tg_last_post":"2026-08-05","tg_days_since_last_post":8,"tg_prior_post_date":"2025-08-29"},{"id":56,"name":"Ixlos mebel, салон мебели","sphere":"Мягкая мебель","address":"улица Кукча-Дарвоза, 326","instagram_link":"https://www.instagram.com/reel/DSIkl_7DLTa/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=204","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":57,"name":"Loft, компания по изготовлению мебели на заказ","sphere":"Корпусная мебель","address":"квартал Чиланзар Ц, 6/3","instagram_link":"https://www.instagram.com/loft_design_creative_studio/","instagram_active":true,"tg_link":"https://t.me/s/loftart_uz?before=433","tg_username":"loftart_uz","tg_status":"own_brand_channel","tg_title":"МЕБЕЛЬ ЛОФТ | LOFT Art в Ташкенте | Каталог LOFT 2021","tg_subscribers":642,"tg_last_post":"2021-10-05","tg_days_since_last_post":1773,"tg_prior_post_date":"2021-10-05"},{"id":58,"name":"Scandi home, магазин смешанных товаров","sphere":"Корпусная мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/scandihome.uz/","instagram_active":true,"tg_link":"https://t.me/s/fixprice_uzb?before=5601","tg_username":"fixprice_uzb","tg_status":"unrelated_channel","tg_title":"Fix Price Узбекистан","tg_subscribers":25000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":59,"name":"Mebel 999, мебельный магазин","sphere":"Мягкая мебель","address":"Дийдор, 96/49","instagram_link":"https://www.instagram.com/mebel_999_tashkent/","instagram_active":true,"tg_link":"https://t.me/s/fullhouseuz?before=1001","tg_username":"fullhouseuz","tg_status":"shared_furniture_channel","tg_title":"FullHouse.uz | Мебель в Ташкенте","tg_subscribers":760,"tg_last_post":"2022-05-27","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":60,"name":"Mebelon, магазин мебели","sphere":"Мягкая мебель","address":"Заргарлик, 10а","instagram_link":"https://www.instagram.com/p/DQkVDPXDKH2/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":61,"name":"Komandor, мебельное производство","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/reel/DZ44CgJsspm/","instagram_active":true,"tg_link":"https://t.me/s/fullhouseuz?before=351","tg_username":"fullhouseuz","tg_status":"shared_furniture_channel","tg_title":"FullHouse.uz | Мебель в Ташкенте","tg_subscribers":760,"tg_last_post":"2022-05-27","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":62,"name":"Zam Nur mebel, магазин мебели","sphere":"Мягкая мебель","address":"Дийдор, 96/49","instagram_link":"https://www.instagram.com/mebel_sklad.uz/","instagram_active":true,"tg_link":"https://t.me/s/myunusabad/402","tg_username":"myunusabad","tg_status":"unrelated_channel","tg_title":"Юнусабадцы_24","tg_subscribers":9930,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":63,"name":"Scandi home, магазин смешанных товаров","sphere":"Корпусная мебель","address":"Юнусабад 4-й квартал, 84","instagram_link":"https://www.instagram.com/scandihome.uz/","instagram_active":true,"tg_link":"https://t.me/s/fixprice_uzb?before=5601","tg_username":"fixprice_uzb","tg_status":"unrelated_channel","tg_title":"Fix Price Узбекистан","tg_subscribers":25000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":64,"name":"Huvaydo mebel, производственный цех","sphere":"Мягкая мебель","address":"улица Махамата Урозбоева, 2а","instagram_link":"https://www.instagram.com/reel/CyFlHjwt8XD/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?after=12","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":65,"name":"Huvaydo mebel, салон мебели","sphere":"Мягкая мебель","address":"улица Махамата Урозбоева, 2а","instagram_link":"https://www.instagram.com/reel/Ct8xzpQgpiT/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?before=19","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":66,"name":"Zumrut, салон мебели","sphere":"Мягкая мебель","address":"проспект Шарафа Рашидова, 93а","instagram_link":"https://www.instagram.com/reel/DapLXdpD_XY/","instagram_active":true,"tg_link":"https://t.me/s/Zumrut_uz?before=1775","tg_username":"Zumrut_uz","tg_status":"own_brand_channel","tg_title":"ZUMRUT","tg_subscribers":354,"tg_last_post":"2026-01-14","tg_days_since_last_post":211,"tg_prior_post_date":"2025-08-23"},{"id":67,"name":"Bonaldo, магазин мебели","sphere":"Мягкая мебель","address":"улица Тараса Шевченко, 33","instagram_link":"https://www.instagram.com/bonaldo.uzbekistan/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":68,"name":"Impero di Mobili, мебельный салон","sphere":"Мягкая мебель","address":"Адхама Рахмата, 15","instagram_link":"https://www.instagram.com/impero_di_mobili/","instagram_active":true,"tg_link":"https://t.me/s/myrabota_uz?before=7099","tg_username":"myrabota_uz","tg_status":"unrelated_channel","tg_title":"Работа в Ташкенте","tg_subscribers":354,"tg_last_post":"2026-08-12","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":69,"name":"Melores Mebel, шоурум","sphere":"Мягкая мебель","address":"улица Себзар, 7","instagram_link":"https://www.instagram.com/reel/DZKnBObtfY5/","instagram_active":true,"tg_link":"https://t.me/s/marketingbolimi?before=771","tg_username":"marketingbolimi","tg_status":"unrelated_channel","tg_title":"Marketing bo'limi","tg_subscribers":9910,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":70,"name":"Арида, салон мебели","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/reel/DJO3DxKsgY7/","instagram_active":true,"tg_link":"https://t.me/s/workitkz/5263","tg_username":"workitkz","tg_status":"unrelated_channel","tg_title":"IT Вакансии Казахстан","tg_subscribers":34500,"tg_last_post":"2026-08-11","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":71,"name":"Strong, мебельный салон","sphere":"Мягкая мебель","address":"микрорайон Алмазар, 7","instagram_link":"https://www.instagram.com/reel/DSz46sTiIdB/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=309","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":72,"name":"Mebel house, салон мебели","sphere":"Мягкая мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/reel/DaSDrlKIedl/","instagram_active":true,"tg_link":"https://t.me/mebel_house_c5","tg_username":"mebel_house_c5","tg_status":"shared_furniture_channel","tg_title":"Mebel House","tg_subscribers":7200,"tg_last_post":"2026-07-19","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":73,"name":"Avalon, шоурум","sphere":"Спальная мебель","address":"Карасарайская улица, 48","instagram_link":"https://www.instagram.com/reel/Dbc66NQj469/","instagram_active":true,"tg_link":"https://t.me/s/uznews?before=43845","tg_username":"uznews","tg_status":"unrelated_channel","tg_title":"UzNews.uz","tg_subscribers":70900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":74,"name":"Neoclassica, магазин мебели","sphere":"Офисная мебель","address":"улица Шимолий Олмазор, 8","instagram_link":"https://www.instagram.com/reel/DHYCF_joooO/","instagram_active":true,"tg_link":"https://t.me/s/AzbukaDomaUz?before=1659","tg_username":"AzbukaDomaUz","tg_status":"own_brand_channel","tg_title":"Азбука Дома","tg_subscribers":1290,"tg_last_post":"2026-08-13","tg_days_since_last_post":0,"tg_prior_post_date":"2025-08-11"},{"id":75,"name":"Mebel City, мебельный салон","sphere":"Корпусная мебель","address":"Асрлар садоси улица, 1а/1","instagram_link":"https://www.instagram.com/toshkentmebelcity/","instagram_active":true,"tg_link":"https://t.me/s/fullhouseuz?before=1001","tg_username":"fullhouseuz","tg_status":"shared_furniture_channel","tg_title":"FullHouse.uz | Мебель в Ташкенте","tg_subscribers":760,"tg_last_post":"2022-05-27","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":76,"name":"Шатура, салон мебели","sphere":"Мягкая мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/reel/DQhCv8jCAv9/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?after=1781","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":77,"name":"Ziynat Mebel, салон мебели","sphere":"Мягкая мебель","address":"улица Кукча-Дарвоза, 554","instagram_link":"https://www.instagram.com/ziynatmebel.uz/","instagram_active":true,"tg_link":"https://t.me/s/ziynatdesign?after=835","tg_username":"ziynatdesign","tg_status":"unrelated_channel","tg_title":"Ziynat Design","tg_subscribers":357,"tg_last_post":"2024-09-11","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":78,"name":"Slovansky dvor, салон мебели","sphere":"Мягкая мебель","address":"Заргарлик, 10а","instagram_link":"https://www.instagram.com/p/DY775oHu0ik/","instagram_active":true,"tg_link":"https://t.me/s/YerzhanY?before=364","tg_username":"YerzhanY","tg_status":"unrelated_channel","tg_title":"Yerzhan Yessimkhanov","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":79,"name":"Pantera, мебельный салон","sphere":"Мягкая мебель","address":"Токзор 3-й тупик, 17а","instagram_link":"https://www.instagram.com/p/DYbzPpFgX0r/","instagram_active":true,"tg_link":"https://t.me/s/headhunter_uz?after=1270","tg_username":"headhunter_uz","tg_status":"unrelated_channel","tg_title":"hh.uz – работа в Узбекистане","tg_subscribers":22300,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":80,"name":"Homedit, мебельная компания","sphere":"Спальная мебель","address":"Паркент, 180","instagram_link":"https://www.instagram.com/h0medit/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":81,"name":"Chinar, мебельная фабрика","sphere":"Мягкая мебель","address":"Дийдор, 96/52","instagram_link":"https://www.instagram.com/chinarmebel_arca/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=457","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":82,"name":"Akmal mebel, магазин мебели","sphere":"Мягкая мебель","address":"улица Янги Юнусабад, 7а","instagram_link":"https://www.instagram.com/akmal_mebellar/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=151","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":83,"name":"Premium concept, шоурум","sphere":"Мебель на заказ","address":"улица Батыра Закирова, 1/2","instagram_link":"https://www.instagram.com/premium_concept_uz/","instagram_active":true,"tg_link":"https://t.me/s/mirabad_avenue?before=529","tg_username":"mirabad_avenue","tg_status":"unrelated_channel","tg_title":"Mirabad Avenue","tg_subscribers":1780,"tg_last_post":"2025-12-26","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":84,"name":"Nazif Dunyo, производственная компания","sphere":"Корпусная мебель","address":null,"instagram_link":"https://www.instagram.com/reel/DYKiUaKsgh3/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":85,"name":"Deconext, шоурум","sphere":"Мебель на заказ","address":"Укчи, 7","instagram_link":"https://www.instagram.com/reel/DILM_kfMzqb/","instagram_active":true,"tg_link":"https://t.me/s/headhunter_uz?before=914","tg_username":"headhunter_uz","tg_status":"unrelated_channel","tg_title":"hh.uz – работа в Узбекистане","tg_subscribers":22300,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":86,"name":"Romatti, шоурум дизайнерских светильников, мебели и декора","sphere":"Мягкая мебель","address":"Паркент, 182","instagram_link":"https://www.instagram.com/reel/DAgLpQvqs_u/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":87,"name":"Komfort elit, шоурум","sphere":"Мягкая мебель","address":"Шахрисабзская улица, 20","instagram_link":"https://www.instagram.com/komfortelit/","instagram_active":true,"tg_link":"https://t.me/s/anorbank/4672","tg_username":"anorbank","tg_status":"unrelated_channel","tg_title":"ANORBANK","tg_subscribers":74300,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":88,"name":"Woodline Alliance, склад","sphere":"Офисная мебель","address":"улица Уста Ширин, 166/4а","instagram_link":"https://www.instagram.com/p/DbVbbEuDhKY/","instagram_active":true,"tg_link":"https://t.me/s/headhunter_uz?before=1229","tg_username":"headhunter_uz","tg_status":"unrelated_channel","tg_title":"hh.uz – работа в Узбекистане","tg_subscribers":22300,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":89,"name":"Wooden Star, фирма по изготовлению мебели","sphere":"Корпусная мебель","address":"Карасу 6-й массив, 7г","instagram_link":"https://www.instagram.com/reel/DRSCFLzCAr_/","instagram_active":true,"tg_link":"https://t.me/s/emanmaterials?before=398","tg_username":"emanmaterials","tg_status":"own_brand_channel","tg_title":"EMAN Materials","tg_subscribers":3530,"tg_last_post":"2026-08-12","tg_days_since_last_post":1,"tg_prior_post_date":"2025-08-28"},{"id":90,"name":"Outdoor mebel, ​мебельный магазин","sphere":"Мебель на заказ","address":null,"instagram_link":"https://www.instagram.com/premiumgarden_uz/","instagram_active":true,"tg_link":"https://t.me/s/potrebitel_uz/10280?q=%23%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":91,"name":"Corax designer, производственная компания","sphere":"Мягкая мебель","address":"Муйнакская, 135","instagram_link":"https://www.instagram.com/reel/Cq-9FqAADpP/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":92,"name":"Мастерская покраски мебели и услуги ровера","sphere":"Мебель на заказ","address":"Джами, 5в","instagram_link":"https://www.instagram.com/p/COR_yAIj3aO/","instagram_active":true,"tg_link":"https://t.me/s/CNCUZ?before=125","tg_username":"CNCUZ","tg_status":"unrelated_channel","tg_title":"ЧПУ станок запчасти (CNC Machine Parts)","tg_subscribers":775,"tg_last_post":"2022-09-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":93,"name":"Mono Mebel, магазин мебели","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/mebel_mono/","instagram_active":true,"tg_link":"https://t.me/mebel_house_c5","tg_username":"mebel_house_c5","tg_status":"shared_furniture_channel","tg_title":"Mebel House","tg_subscribers":7200,"tg_last_post":"2026-07-19","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":94,"name":"Fortis, шоурум","sphere":"Мебель на заказ","address":"Паркент, 131","instagram_link":"https://www.instagram.com/reel/DJCG5YesBvR/","instagram_active":true,"tg_link":"https://t.me/s/kapital24?before=1928","tg_username":"kapital24","tg_status":"unrelated_channel","tg_title":"Kapitalbank Uzbekistan","tg_subscribers":25800,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":95,"name":"Divani.uz, мебельный магазин","sphere":"Мягкая мебель","address":"Ахангаранское шоссе, 327а","instagram_link":"https://www.instagram.com/divani_uz/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":96,"name":"Uzdivano, компания","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/reel/DKOZ-yhIu0R/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":97,"name":"Imaj, шоурум","sphere":"Мягкая мебель","address":"улица Абдуллы Кадыри, 7","instagram_link":"https://www.instagram.com/p/DbOlMmVDESW/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":98,"name":"IL Home, шоурум","sphere":"Мягкая мебель","address":"Нукусская улица, 31 блок 4","instagram_link":"https://www.instagram.com/ilhome_showroom/","instagram_active":true,"tg_link":"https://t.me/s/afishauz?before=32346","tg_username":"afishauz","tg_status":"unrelated_channel","tg_title":"Afisha.uz - Все события Ташкента","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":99,"name":"Eman Materisals Kedr, торговая компания","sphere":"Мебель на заказ","address":"Чинабад, 63/3","instagram_link":"https://www.instagram.com/reel/DJnxnylCzK0/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":100,"name":"Eman Materisals Kedr, торговая компания","sphere":"Мебель на заказ","address":"Уста Ширин 1-й проезд, 254/3","instagram_link":"https://www.instagram.com/reel/DJnxnylCzK0/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":101,"name":"Calligaris, шоурум","sphere":"Мягкая мебель","address":"Салар буйи, 47/1","instagram_link":"https://www.instagram.com/p/DL1kJUri-p7/","instagram_active":true,"tg_link":"https://t.me/s/Dafnamebel?after=694","tg_username":"Dafnamebel","tg_status":"own_brand_channel","tg_title":"DAFNA","tg_subscribers":2830,"tg_last_post":"2026-08-13","tg_days_since_last_post":0,"tg_prior_post_date":"2025-08-31"},{"id":102,"name":"Askona, магазин","sphere":"Спальная мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/ia.roslava9953/reel/DboTTsqMuBO/","instagram_active":true,"tg_link":"https://t.me/s/afishauz?before=20527","tg_username":"afishauz","tg_status":"unrelated_channel","tg_title":"Afisha.uz - Все события Ташкента","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":103,"name":"Kare, магазин товаров для интерьера","sphere":"Мягкая мебель","address":"Укчи, 7","instagram_link":"https://www.instagram.com/kare_tashkent/","instagram_active":true,"tg_link":"https://t.me/s/bulavka?before=3681","tg_username":"bulavka","tg_status":"unrelated_channel","tg_title":"Bulavka.uz","tg_subscribers":1310,"tg_last_post":"2024-04-19","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":104,"name":"Dafna, шоурум","sphere":"Мягкая мебель","address":"Заргар улица, 2","instagram_link":"https://www.instagram.com/dafnamebel/","instagram_active":true,"tg_link":"https://t.me/s/meyosassociation?before=201","tg_username":"meyosassociation","tg_status":"shared_furniture_channel","tg_title":"MEYOS - Mebel va Yog'ochsozlik Sanoati Uyushmasi","tg_subscribers":585,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":105,"name":"Honor Furniture, магазин","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/honorfurniture.arca/","instagram_active":true,"tg_link":"https://t.me/s/caexuzbekistan?before=274","tg_username":"caexuzbekistan","tg_status":"own_brand_channel","tg_title":"CAEx Uzbekistan","tg_subscribers":1570,"tg_last_post":"2026-08-04","tg_days_since_last_post":9,"tg_prior_post_date":"2025-08-28"},{"id":106,"name":"Divani.uz, мебельный магазин","sphere":"Мягкая мебель","address":"Чиланзар 7-й квартал, 23","instagram_link":"https://www.instagram.com/divani_uz/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":107,"name":"Мебель Ц-4, магазин","sphere":"Мягкая мебель","address":"Массив Кашгар (Ц-4), 20","instagram_link":"https://www.instagram.com/reel/DZ4SnJOomWW/","instagram_active":true,"tg_link":"https://t.me/s/divanchi_uz?before=772","tg_username":"divanchi_uz","tg_status":"own_brand_channel","tg_title":"Divanchi.uz","tg_subscribers":839,"tg_last_post":"2025-02-27","tg_days_since_last_post":532,"tg_prior_post_date":"2025-02-27"},{"id":108,"name":"Interstone, компания по продаже искусственного камня","sphere":"Не определено","address":"Нигоры 3-й проезд, 37а","instagram_link":"https://www.instagram.com/interstone_uz/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":109,"name":"Кухни Модуль Онлайн","sphere":"Не определено","address":"проспект Шарафа Рашидова, 71","instagram_link":"https://www.instagram.com/kuhni.modul_uz/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=1895","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":110,"name":"Rich Interior, магазин обоев и товаров для интерьера","sphere":"Мебельный магазин","address":"Махтумкули, 99","instagram_link":"https://www.instagram.com/reel/DNepk6tCHAJ/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":111,"name":"Terra stone, шоурум по продаже облицовочного камня","sphere":"Не определено","address":"Массив Ялангач, 4а/2 стр","instagram_link":"https://www.instagram.com/reel/DOGAn1gDe24/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":112,"name":"Sagbon, шоурум","sphere":"Не определено","address":"улица Себзар, 8","instagram_link":"https://www.instagram.com/reel/DM3CCsdNfaa/","instagram_active":true,"tg_link":"https://t.me/s/goldenhouseuz?before=1369","tg_username":"goldenhouseuz","tg_status":"unrelated_channel","tg_title":"Golden House","tg_subscribers":10600,"tg_last_post":"2026-08-09","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":113,"name":"Celmo, магазин мебели","sphere":"Мягкая мебель","address":"Пахлавона Махмуда проезд, 28","instagram_link":"https://www.instagram.com/reel/C27piJINl_q/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":114,"name":"Славянский двор, салон мебели","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/slovanskiy_dvor/","instagram_active":true,"tg_link":"https://t.me/s/courierofculture?after=16295","tg_username":"courierofculture","tg_status":"unrelated_channel","tg_title":"ку-ку","tg_subscribers":44600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":115,"name":"Yassi elegance, мебельный салон","sphere":"Мебельный магазин","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/yassielegance/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=457","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":116,"name":"Ashley Homestore, салон мебели","sphere":"Мягкая мебель","address":"Баходира, 2/1","instagram_link":"https://www.instagram.com/ashleyhomestore.uz/","instagram_active":true,"tg_link":"https://t.me/s/gazetauz?before=45207","tg_username":"gazetauz","tg_status":"unrelated_channel","tg_title":"Gazeta.uz - Новости Узбекистана","tg_subscribers":86600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":117,"name":"Uyut komfort mebel, Производственная компания","sphere":"Мягкая мебель","address":"проспект Амира Темура, 146","instagram_link":"https://www.instagram.com/uyut_mebeluz/","instagram_active":true,"tg_link":"https://t.me/s/weltewhomeuz?before=2825","tg_username":"weltewhomeuz","tg_status":"own_brand_channel","tg_title":"Weltew Home","tg_subscribers":1010,"tg_last_post":"2025-12-22","tg_days_since_last_post":234,"tg_prior_post_date":"2025-07-05"},{"id":118,"name":"Master Plate, Производственная компания","sphere":"Корпусная мебель","address":"Куксарай, 99","instagram_link":"https://www.instagram.com/reel/DaPu6Z3tqn5/","instagram_active":true,"tg_link":"https://t.me/s/ish_bor_tashkent?before=18065","tg_username":"ish_bor_tashkent","tg_status":"unrelated_channel","tg_title":"ISH BOR TASHKENT | Работа в Ташкенте","tg_subscribers":8900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":119,"name":"Infinity Чинабад, шоурум","sphere":"Корпусная мебель","address":"Чинабад, 63/3","instagram_link":"https://www.instagram.com/infinitybyeman/","instagram_active":true,"tg_link":"https://t.me/s/infinitybyeman?before=387","tg_username":"infinitybyeman","tg_status":"own_brand_channel","tg_title":"INFINITY by Eman Materials (Hettich)","tg_subscribers":1510,"tg_last_post":"2026-08-10","tg_days_since_last_post":3,"tg_prior_post_date":"2025-08-30"},{"id":120,"name":"Divanev, мебельная компания","sphere":"Мягкая мебель","address":"улица Ислама Каримова, 17","instagram_link":"https://www.instagram.com/reel/DF2huEuOWgG/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":121,"name":"Wood Masters Service, Производственная компания","sphere":"Корпусная мебель","address":"Султанали Машхади 2-й переулок, 2а","instagram_link":"https://www.instagram.com/reel/Db0AHi0IJJJ/","instagram_active":true,"tg_link":"https://t.me/s/consultashkent?before=3620","tg_username":"consultashkent","tg_status":"unrelated_channel","tg_title":"Посольство России в Узбекистане","tg_subscribers":11200,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":122,"name":"Эра, салон мебели","sphere":"Мягкая мебель","address":"улица Тимура Малика, 3а","instagram_link":"https://www.instagram.com/eramebel.uz/","instagram_active":true,"tg_link":"https://t.me/s/atlasmebeluz?before=454","tg_username":"atlasmebeluz","tg_status":"shared_furniture_channel","tg_title":"Atlas Mebel","tg_subscribers":853,"tg_last_post":"2023-01-20","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":123,"name":"Lusso mebel, компания по производству серийной мебели","sphere":"Мягкая мебель","address":"Куксарай, 32","instagram_link":"https://www.instagram.com/reel/DbIyJEkgpz8/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":124,"name":"Deli, компания","sphere":"Офисная мебель","address":"Ферганское шоссе, 15/23","instagram_link":"https://www.instagram.com/deli_uz/","instagram_active":true,"tg_link":"https://t.me/s/MFaktorUz?after=1096","tg_username":"MFaktorUz","tg_status":"unrelated_channel","tg_title":"MFaktor.uz","tg_subscribers":15300,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":125,"name":"Prime medicine, компания","sphere":"Офисная мебель","address":"улица Лабзак, 1Б/2","instagram_link":"https://www.instagram.com/primemed_uz/","instagram_active":true,"tg_link":"https://t.me/s/headhunter_uz?before=850","tg_username":"headhunter_uz","tg_status":"unrelated_channel","tg_title":"hh.uz – работа в Узбекистане","tg_subscribers":22300,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":126,"name":"Zivella Office Furniture, компания","sphere":"Офисная мебель","address":"Халкобод, 10","instagram_link":"https://www.instagram.com/reel/DI6EOjiMW0Z/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":127,"name":"Etalon, мебельный салон","sphere":"Офисная мебель","address":"Нурафшон проспект, 34а/1","instagram_link":"https://www.instagram.com/etalonmebel.uz/","instagram_active":true,"tg_link":"https://t.me/s/fullhouseuz?before=1001","tg_username":"fullhouseuz","tg_status":"shared_furniture_channel","tg_title":"FullHouse.uz | Мебель в Ташкенте","tg_subscribers":760,"tg_last_post":"2022-05-27","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":128,"name":"InterBrands.uz, Офис и пункт выдачи заказов.","sphere":"Офисная мебель","address":"Сурхон, 29","instagram_link":"https://www.instagram.com/reel/DBgN50rOt2C/","instagram_active":true,"tg_link":"https://t.me/s/MOBIUZrus?before=3034","tg_username":"MOBIUZrus","tg_status":"unrelated_channel","tg_title":"Архивный канал (Mobiuz)","tg_subscribers":1460,"tg_last_post":"2021-09-16","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":129,"name":"Bravo, мебельный салон","sphere":"Мягкая мебель","address":"улица Фурката, 25","instagram_link":"https://www.instagram.com/bravo_mebel_uz/","instagram_active":true,"tg_link":"https://t.me/s/trudmarket?before=4217","tg_username":"trudmarket","tg_status":"unrelated_channel","tg_title":"Трудмаркет. Работа, Учеба, стажировки","tg_subscribers":1020,"tg_last_post":"2026-01-28","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":130,"name":"Woodline Alliance, Мебельный салон","sphere":"Офисная мебель","address":"Карасарайская улица, 257/1","instagram_link":"https://www.instagram.com/p/DbVbbEuDhKY/","instagram_active":true,"tg_link":"https://t.me/s/headhunter_uz?before=1072","tg_username":"headhunter_uz","tg_status":"unrelated_channel","tg_title":"hh.uz – работа в Узбекистане","tg_subscribers":22300,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":131,"name":"Ergotrend, шоурум","sphere":"Офисная мебель","address":"Адхама Рахмата, 8/2","instagram_link":"https://www.instagram.com/egotrend.uz/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":132,"name":"Starmobil luxury, мебельный салон","sphere":"Мягкая мебель","address":"Катта Дархон, 2","instagram_link":null,"instagram_active":false,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":133,"name":"Bayir, магазин мебели","sphere":"Мягкая мебель","address":"проспект Амира Темура, 2","instagram_link":"https://www.instagram.com/reel/C_KoWDbqcfi/","instagram_active":true,"tg_link":"https://t.me/s/myrabota_uz/7171","tg_username":"myrabota_uz","tg_status":"unrelated_channel","tg_title":"Работа в Ташкенте","tg_subscribers":354,"tg_last_post":"2026-08-12","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":134,"name":"Chicco Baby, магазин детских товаров","sphere":"Детская мебель","address":"квартал И-24, 2а","instagram_link":"https://www.instagram.com/chicco.tashkent/","instagram_active":true,"tg_link":"https://t.me/s/chiccotashkent?before=28253","tg_username":"chiccotashkent","tg_status":"unrelated_channel","tg_title":"Chicco tashkent","tg_subscribers":5270,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":135,"name":"Bolalar dunyosi, магазин","sphere":"Детская мебель","address":"проспект Амира Темура, 41/5","instagram_link":"https://www.instagram.com/popular/bolalar-dunyosi/","instagram_active":true,"tg_link":"https://t.me/s/poytaxt_uz?q=%23%D0%A0%D0%B5%D1%82%D1%80%D0%BE%D0%A4%D0%BE%D1%82%D0%BE&before=39172","tg_username":"poytaxt_uz","tg_status":"unrelated_channel","tg_title":"Toshkent shahar hokimligi Matbuot xizmati","tg_subscribers":26000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":136,"name":"Mimibel, магазин детской мебели","sphere":"Детская мебель","address":"улица Гулсарой, 7","instagram_link":"https://www.instagram.com/reel/DVtVCHDjK79/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":137,"name":"Nesil, магазин детских товаров","sphere":"Детская мебель","address":"Малая кольцевая дорога, 143а","instagram_link":"https://www.instagram.com/nesil_babyshop/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":138,"name":"Ranoart, магазин по продаже товаров для кондитеров","sphere":"Детская мебель","address":"Чикишма 4-й проезд, 45/1","instagram_link":null,"instagram_active":false,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":139,"name":"Домик феи, мастерская","sphere":"Детская мебель","address":"улица Афрасиаб, 15/1","instagram_link":"https://www.instagram.com/reel/CkeJqWeA_RP/","instagram_active":true,"tg_link":"https://t.me/s/dostavki_tashkent?before=721","tg_username":"dostavki_tashkent","tg_status":"unrelated_channel","tg_title":"Полезные доставки, Ташкент","tg_subscribers":1170,"tg_last_post":"2026-07-08","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":140,"name":"Baby Lux, магазин","sphere":"Мягкая мебель","address":"улица Сакичмон, 1/37","instagram_link":"https://www.instagram.com/babyluxe.uz/","instagram_active":true,"tg_link":"https://t.me/s/babyhouseuz?before=91059","tg_username":"babyhouseuz","tg_status":"unrelated_channel","tg_title":"BABY HOUSE","tg_subscribers":14500,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":141,"name":"Art Vlad, мебельная компания","sphere":"Офисная мебель","address":"Буюк Ипак Йули, 495","instagram_link":"https://www.instagram.com/reel/Da-QGD0A00s/","instagram_active":true,"tg_link":"https://t.me/s/max_kanalchik?before=2191","tg_username":"max_kanalchik","tg_status":"unrelated_channel","tg_title":"MAX agency / Илья Лайтнер","tg_subscribers":14800,"tg_last_post":"2026-08-10","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":142,"name":"Salon exclusive, мебельный салон","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/salon_exclusive_uz/","instagram_active":true,"tg_link":"https://t.me/s/dogtastashkent?before=80","tg_username":"dogtastashkent","tg_status":"own_brand_channel","tg_title":"DOĞTAŞ TASHKENT","tg_subscribers":409,"tg_last_post":"2026-08-10","tg_days_since_last_post":3,"tg_prior_post_date":"2025-08-29"},{"id":143,"name":"Progress, компания","sphere":"Корпусная мебель","address":"Ниёзбек Йули, 24/1","instagram_link":"https://www.instagram.com/progress_uz_/","instagram_active":true,"tg_link":"https://t.me/s/myrabota_uz/3422","tg_username":"myrabota_uz","tg_status":"unrelated_channel","tg_title":"Работа в Ташкенте","tg_subscribers":354,"tg_last_post":"2026-08-12","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":144,"name":"SlabMaster Pro, компания-производитель сувенирной продукции и предметов интерьера из древесины и эпоксидной смолы","sphere":"Офисная мебель","address":"Навруз, 144/4","instagram_link":"https://www.instagram.com/slabmasterpro/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":145,"name":"Focus, мебельный салон","sphere":"Мягкая мебель","address":"улица Фурката, 2","instagram_link":"https://www.instagram.com/umnayamebel_uz/","instagram_active":true,"tg_link":"https://t.me/s/realestatemurod1?before=3137","tg_username":"realestatemurod1","tg_status":"unrelated_channel","tg_title":"Real Estate Murod","tg_subscribers":12200,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":146,"name":"Moredo, мебельный салон","sphere":"Мягкая мебель","address":"Янгиерская, 43а","instagram_link":null,"instagram_active":false,"tg_link":"https://t.me/s/uzbairportsuz?before=5030","tg_username":"uzbairportsuz","tg_status":"unrelated_channel","tg_title":"UZBEKISTAN AIRPORTS","tg_subscribers":12300,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":147,"name":"Wood master lux, цех по производству мебели","sphere":"Мягкая мебель","address":null,"instagram_link":"https://www.instagram.com/woodmaster.lux/","instagram_active":true,"tg_link":"https://t.me/s/mondelux?before=94","tg_username":"mondelux","tg_status":"shared_furniture_channel","tg_title":"MONDELUX | МЕБЕЛЬ №1","tg_subscribers":322,"tg_last_post":"2022-01-21","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":148,"name":"Sharq mebel rasrochka, салон мебели","sphere":"Мягкая мебель","address":"Учтепа 12-й квартал, 12а/1","instagram_link":"https://www.instagram.com/reel/DRTpoLziHE2/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":149,"name":"Магазин мебели, ИП Юнусунов Б.Т.","sphere":"Мягкая мебель","address":"улица Янги Сергели, 9/5","instagram_link":null,"instagram_active":false,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":150,"name":"Life kids, магазин детской одежды","sphere":"Детская мебель","address":"Массив Сергели-8, 71","instagram_link":"https://www.instagram.com/reel/CYS9ic0BCTi/","instagram_active":true,"tg_link":"https://t.me/s/bonitoshopuz?before=1805","tg_username":"bonitoshopuz","tg_status":"unrelated_channel","tg_title":"BonitoShop.uz","tg_subscribers":1510,"tg_last_post":"2026-08-09","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":151,"name":"Albatross furniture, компания","sphere":"Мягкая мебель","address":"Узумзор, 35","instagram_link":"https://www.instagram.com/reel/DbvBXqvNsdK/","instagram_active":true,"tg_link":"https://t.me/s/inter_city?before=1923","tg_username":"inter_city","tg_status":"unrelated_channel","tg_title":"ИНТЕРСИТИ","tg_subscribers":16600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":152,"name":"Магазин мебели, ИП Усмонов Р.Р.","sphere":"Мягкая мебель","address":"улица Юзработ, 12","instagram_link":"https://www.instagram.com/makonsavdo/reel/DbxutfgMt3G/","instagram_active":true,"tg_link":"https://t.me/s/CorpInfo?before=9066","tg_username":"CorpInfo","tg_status":"unrelated_channel","tg_title":"КорпИнфо","tg_subscribers":8370,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":153,"name":"Paradiso house, магазин","sphere":"Офисная мебель","address":"улица Софдил, D-1","instagram_link":"https://www.instagram.com/p/DZVMdqADewW/","instagram_active":true,"tg_link":"https://t.me/s/afishauz?before=6415","tg_username":"afishauz","tg_status":"unrelated_channel","tg_title":"Afisha.uz - Все события Ташкента","tg_subscribers":32900,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":154,"name":"Kupakids, мебельный салон","sphere":"Детская мебель","address":"Тахтапуль, 64а","instagram_link":"https://www.instagram.com/reel/C3UVYWgq-ZT/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":155,"name":"Maksmebel, Мебельная компания","sphere":"Мягкая мебель","address":"Немат тупик, 1/1","instagram_link":"https://www.instagram.com/reel/DA0skC7OpOk/","instagram_active":true,"tg_link":"https://t.me/s/birzhauz/31836","tg_username":"birzhauz","tg_status":"unrelated_channel","tg_title":"Биржа.Уз | Вакансия | Работа в Ташкенте","tg_subscribers":10400,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":156,"name":"Mebel park, мебельный центр","sphere":"Мягкая мебель","address":"улица Фурката, 27","instagram_link":"https://www.instagram.com/arcamebel/","instagram_active":true,"tg_link":"https://t.me/s/potrebitel_uz/10280?q=%23%D0%BC%D0%B5%D0%B1%D0%B5%D0%BB%D1%8C","tg_username":"potrebitel_uz","tg_status":"unrelated_channel","tg_title":"Потребитель.Уз","tg_subscribers":38600,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":157,"name":"Mudo Concept, магазин","sphere":"Мягкая мебель","address":"улица Богишамол, 59","instagram_link":"https://www.instagram.com/mudoconceptuz/","instagram_active":true,"tg_link":"https://t.me/s/SamsungUzbekistan?before=595","tg_username":"SamsungUzbekistan","tg_status":"unrelated_channel","tg_title":"Samsung Uzbekistan","tg_subscribers":9000,"tg_last_post":"2026-08-13","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":158,"name":"Treet, шоурум","sphere":"Мебель на заказ","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/reel/DP_ls0ODATn/","instagram_active":true,"tg_link":"https://t.me/s/silver_tree_uz?q=%23new&before=3335","tg_username":"silver_tree_uz","tg_status":"unrelated_channel","tg_title":"SILVER TREE UZ","tg_subscribers":4010,"tg_last_post":"2026-07-31","tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":159,"name":"Sella&Menza, ​мебельный салон","sphere":"Мебель на заказ","address":null,"instagram_link":"https://www.instagram.com/reel/DHbYSimKK4q/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null},{"id":160,"name":"Luxmod mebel, салон мебели","sphere":"Мягкая мебель","address":"Махтумкули, 75","instagram_link":"https://www.instagram.com/reel/DZANSXyMddw/","instagram_active":true,"tg_link":null,"tg_username":null,"tg_status":"no_telegram","tg_title":null,"tg_subscribers":null,"tg_last_post":null,"tg_days_since_last_post":null,"tg_prior_post_date":null}]
+</script>
+<script>
+(function(){
+  "use strict";
+  const DATA = JSON.parse(document.getElementById('raw-data').textContent);
+  const TODAY = new Date('2026-08-13T00:00:00');
+
+  const STATUS_META = {
+    own_brand_channel:      { label: 'Собственный канал бренда', color: 'var(--good)',     solid: '#0ca30c' },
+    shared_furniture_channel: { label: 'Общий/торговый канал',   color: 'var(--accent)',   solid: '#2a78d6' },
+    unrelated_channel:      { label: 'Ссылка на чужой канал',    color: 'var(--critical)', solid: '#d03b3b' },
+    no_telegram:            { label: 'Нет Telegram',             color: 'var(--muted-chip)', solid: '#c3c2b7' },
+  };
+  const STATUS_ORDER = ['own_brand_channel','shared_furniture_channel','unrelated_channel','no_telegram'];
+
+  const SPHERES = [...new Set(DATA.map(d => d.sphere))].sort((a,b)=> {
+    const ca = DATA.filter(d=>d.sphere===a).length, cb = DATA.filter(d=>d.sphere===b).length;
+    return cb-ca;
+  });
+
+  // ---------------- state ----------------
+  const state = {
+    search: '',
+    tgStatus: 'all',
+    spheres: new Set(SPHERES),
+    threshold: 30,
+    includeShared: true,
+  };
+
+  function daysSince(dateStr){
+    if(!dateStr) return null;
+    const d = new Date(dateStr+'T00:00:00');
+    return Math.round((TODAY - d) / 86400000);
+  }
+
+  // precompute days-since for all rows once
+  DATA.forEach(d => { d._days = daysSince(d.tg_last_post); });
+
+  function filteredData(){
+    const q = state.search.trim().toLowerCase();
+    return DATA.filter(d => {
+      if (q && !d.name.toLowerCase().includes(q)) return false;
+      if (state.tgStatus !== 'all' && d.tg_status !== state.tgStatus) return false;
+      if (!state.spheres.has(d.sphere)) return false;
+      return true;
+    });
+  }
+
+  function fmtNum(n){
+    if (n === null || n === undefined) return '—';
+    return n.toLocaleString('ru-RU');
+  }
+  function fmtCompact(n){
+    if (n === null || n === undefined) return '—';
+    if (n >= 1000) return (n/1000).toFixed(n>=10000?0:1).replace('.0','') + 'K';
+    return String(n);
+  }
+  function esc(s){ const e=document.createElement('div'); e.textContent = s==null?'':String(s); return e.innerHTML; }
+
+  // ================= RENDER: filter chips =================
+  function renderSphereChips(){
+    const box = document.getElementById('f-sphere-chips');
+    box.innerHTML = '';
+    SPHERES.forEach(sp => {
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (state.spheres.has(sp) ? ' active' : '');
+      chip.textContent = sp;
+      chip.addEventListener('click', () => {
+        if (state.spheres.has(sp)) state.spheres.delete(sp); else state.spheres.add(sp);
+        renderAll();
+      });
+      box.appendChild(chip);
+    });
+  }
+
+  // ================= RENDER: stat tiles =================
+  function renderStats(rows){
+    const total = rows.length;
+    const igActive = rows.filter(d=>d.instagram_active).length;
+    const ownTg = rows.filter(d=>d.tg_status==='own_brand_channel').length;
+    const sharedTg = rows.filter(d=>d.tg_status==='shared_furniture_channel').length;
+    const unrelated = rows.filter(d=>d.tg_status==='unrelated_channel').length;
+    const presence = ownTg + (state.includeShared ? sharedTg : 0);
+    const activeOwn = rows.filter(d=>d.tg_status==='own_brand_channel' && d._days!==null && d._days<=state.threshold).length;
+    const avgSubs = (() => {
+      const subs = rows.filter(d=>d.tg_status==='own_brand_channel' && d.tg_subscribers).map(d=>d.tg_subscribers);
+      if (!subs.length) return null;
+      return Math.round(subs.reduce((a,b)=>a+b,0)/subs.length);
+    })();
+
+    const tiles = [
+      { label: 'Компаний в выборке', value: fmtNum(total), delta: '' },
+      { label: 'Instagram активен', value: total? Math.round(100*igActive/total)+'%' : '—', delta: `${igActive} из ${total}`, flag:'good' },
+      { label: 'TG-присутствие', value: total? Math.round(100*presence/total)+'%' : '—', delta: `${presence} компаний (свои + общие каналы)` },
+      { label: 'Собственный TG-канал', value: total? Math.round(100*ownTg/total)+'%' : '—', delta: `${ownTg} компаний`, flag:'good' },
+      { label: 'Ссылки на чужие каналы', value: total? Math.round(100*unrelated/total)+'%' : '—', delta: `${unrelated} записей — риск завышения активности`, flag:'critical' },
+      { label: `Активны за ≤${state.threshold} дн. (свой канал)`, value: ownTg? Math.round(100*activeOwn/ownTg)+'%' : '—', delta: avgSubs? `в среднем ${fmtNum(avgSubs)} подписчиков` : 'нет данных' },
+    ];
+
+    const box = document.getElementById('stat-tiles');
+    box.innerHTML = '';
+    tiles.forEach(t => {
+      const el = document.createElement('div');
+      el.className = 'card tile';
+      el.innerHTML = `<div class="label">${esc(t.label)}</div><div class="value">${esc(t.value)}</div><div class="delta${t.flag?' flag-'+t.flag:''}">${esc(t.delta||'')}</div>`;
+      box.appendChild(el);
+    });
+    document.getElementById('pill-total').textContent = total;
+  }
+
+  // ================= RENDER: donut (tg quality, whole filtered set) =================
+  function renderDonut(rows){
+    const box = document.getElementById('chart-tgquality');
+    box.innerHTML = '';
+    const total = rows.length || 1;
+    const counts = STATUS_ORDER.map(k => ({ key:k, n: rows.filter(d=>d.tg_status===k).length }));
+
+    const R = 70, CX = 90, CY = 90, STROKE = 26;
+    const circumference = 2*Math.PI*R;
+    let offset = 0;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS,'svg');
+    svg.setAttribute('width', 180); svg.setAttribute('height', 180); svg.setAttribute('viewBox','0 0 180 180');
+    svg.classList.add('donut');
+
+    const bg = document.createElementNS(svgNS,'circle');
+    bg.setAttribute('cx',CX); bg.setAttribute('cy',CY); bg.setAttribute('r',R);
+    bg.setAttribute('fill','none'); bg.setAttribute('stroke','var(--gridline)'); bg.setAttribute('stroke-width',STROKE);
+    svg.appendChild(bg);
+
+    counts.forEach(c => {
+      if (c.n === 0) return;
+      const frac = c.n/total;
+      const len = frac*circumference;
+      const seg = document.createElementNS(svgNS,'circle');
+      seg.setAttribute('cx',CX); seg.setAttribute('cy',CY); seg.setAttribute('r',R);
+      seg.setAttribute('fill','none');
+      seg.setAttribute('stroke', STATUS_META[c.key].solid);
+      seg.setAttribute('stroke-width', STROKE);
+      seg.setAttribute('stroke-dasharray', `${len-2} ${circumference-len+2}`);
+      seg.setAttribute('stroke-dashoffset', -offset);
+      seg.setAttribute('transform', `rotate(-90 ${CX} ${CY})`);
+      seg.style.transition = 'stroke-dasharray .25s ease';
+      const title = document.createElementNS(svgNS,'title');
+      title.textContent = `${STATUS_META[c.key].label}: ${c.n} (${Math.round(frac*100)}%)`;
+      seg.appendChild(title);
+      svg.appendChild(seg);
+      offset += len;
+    });
+
+    const centerVal = document.createElementNS(svgNS,'text');
+    centerVal.setAttribute('x',CX); centerVal.setAttribute('y',CY-2);
+    centerVal.setAttribute('text-anchor','middle'); centerVal.setAttribute('class','donut-center-label');
+    centerVal.setAttribute('fill','var(--text-primary)');
+    centerVal.textContent = rows.length;
+    svg.appendChild(centerVal);
+    const centerSub = document.createElementNS(svgNS,'text');
+    centerSub.setAttribute('x',CX); centerSub.setAttribute('y',CY+16);
+    centerSub.setAttribute('text-anchor','middle'); centerSub.setAttribute('class','donut-center-sub');
+    centerSub.textContent = 'компаний';
+    svg.appendChild(centerSub);
+
+    box.appendChild(svg);
+
+    const legend = document.createElement('div');
+    legend.className = 'legend';
+    legend.style.flexDirection = 'column';
+    legend.style.gap = '10px';
+    STATUS_ORDER.forEach(k => {
+      const c = counts.find(x=>x.key===k);
+      const item = document.createElement('div');
+      item.className = 'legend-item';
+      item.innerHTML = `<span class="legend-swatch" style="background:${STATUS_META[k].solid}"></span><span><b>${c.n}</b> · ${esc(STATUS_META[k].label)}</span>`;
+      legend.appendChild(item);
+    });
+    box.appendChild(legend);
+  }
+
+  // ================= RENDER: sphere bar chart =================
+  function renderSphereBar(rows){
+    const box = document.getElementById('chart-sphere');
+    box.innerHTML = '';
+    const counts = SPHERES.map(sp => ({ sphere: sp, n: rows.filter(d=>d.sphere===sp).length }))
+      .filter(x=>x.n>0)
+      .sort((a,b)=>b.n-a.n);
+    const max = Math.max(1, ...counts.map(c=>c.n));
+    counts.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'barrow';
+      const pct = Math.max(2, Math.round(100*c.n/max));
+      row.innerHTML = `<div class="barlabel">${esc(c.sphere)}</div>
+        <div class="bartrack"><div class="barfill" style="width:${pct}%"></div></div>
+        <div class="barval">${c.n}</div>`;
+      box.appendChild(row);
+    });
+    if (!counts.length) box.innerHTML = '<p class="hint">Нет данных для текущих фильтров</p>';
+  }
+
+  // ================= RENDER: recency chart (own_brand only) =================
+  function renderRecency(rows){
+    const box = document.getElementById('chart-recency');
+    box.innerHTML = '';
+    const own = rows.filter(d=>d.tg_status==='own_brand_channel' && d._days!==null);
+    document.getElementById('own-count-hint').textContent = rows.filter(d=>d.tg_status==='own_brand_channel').length;
+
+    const buckets = [
+      { label:'0–7 дней', test: d=>d._days<=7 },
+      { label:'8–30 дней', test: d=>d._days>7 && d._days<=30 },
+      { label:'31–90 дней', test: d=>d._days>30 && d._days<=90 },
+      { label:'91–365 дней', test: d=>d._days>90 && d._days<=365 },
+      { label:'> 365 дней', test: d=>d._days>365 },
+    ];
+    const counts = buckets.map(b => ({ label:b.label, n: own.filter(b.test).length }));
+    const max = Math.max(1, ...counts.map(c=>c.n));
+    counts.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'barrow';
+      const pct = Math.max(2, Math.round(100*c.n/max));
+      const withinThreshold = (c.label==='0–7 дней' && state.threshold>=7) || (c.label==='8–30 дней' && state.threshold>=8);
+      row.innerHTML = `<div class="barlabel">${esc(c.label)}</div>
+        <div class="bartrack"><div class="barfill" style="width:${pct}%; background:${withinThreshold?'var(--good)':'var(--accent)'}"></div></div>
+        <div class="barval">${c.n}</div>`;
+      box.appendChild(row);
+    });
+    if (!own.length) box.innerHTML = '<p class="hint">Нет собственных каналов для текущих фильтров</p>';
+  }
+
+  // ================= RENDER: top subscribers =================
+  function renderTopSubs(rows){
+    const box = document.getElementById('chart-top-subs');
+    box.innerHTML = '';
+    const top = rows.filter(d=>d.tg_status==='own_brand_channel' && d.tg_subscribers)
+      .sort((a,b)=>b.tg_subscribers-a.tg_subscribers).slice(0,10);
+    const max = Math.max(1, ...top.map(d=>d.tg_subscribers));
+    top.forEach(d => {
+      const row = document.createElement('div');
+      row.className = 'barrow';
+      const pct = Math.max(2, Math.round(100*d.tg_subscribers/max));
+      row.innerHTML = `<div class="barlabel" title="${esc(d.name)}">${esc(d.tg_title||d.name)}</div>
+        <div class="bartrack"><div class="barfill" style="width:${pct}%"></div></div>
+        <div class="barval">${fmtCompact(d.tg_subscribers)}</div>`;
+      box.appendChild(row);
+    });
+    if (!top.length) box.innerHTML = '<p class="hint">Нет данных для текущих фильтров</p>';
+  }
+
+  // ================= wire up filters =================
+  document.getElementById('f-search').addEventListener('input', e => { state.search = e.target.value; renderAll(); });
+  document.getElementById('f-tgstatus').addEventListener('change', e => { state.tgStatus = e.target.value; renderAll(); });
+  document.getElementById('f-reset').addEventListener('click', () => {
+    state.search=''; state.tgStatus='all'; state.spheres = new Set(SPHERES);
+    document.getElementById('f-search').value=''; document.getElementById('f-tgstatus').value='all';
+    renderAll();
+  });
+
+  // ================= master render =================
+  function renderAll(){
+    const rows = filteredData();
+    renderStats(rows);
+    renderDonut(rows);
+    renderSphereBar(rows);
+    renderRecency(rows);
+    renderTopSubs(rows);
+  }
+
+  renderSphereChips();
+  renderAll();
+})();
+</script>
+</body>
+</html>
